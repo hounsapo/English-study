@@ -4,6 +4,254 @@
  */
 window.ARTICLES = [
   {
+    "id": "d20261123",
+    "date": "2026-11-23",
+    "dateLabel": "2026년 11월 23일 (월)",
+    "title": "블랙먼데이 우려에 증안펀드 18년만에 가동되나…F4 \"준비 착수\"(종합)",
+    "outlet": "연합뉴스 (Yonhap News)",
+    "url": "https://www.yna.co.kr/view/AKR20261122044351002",
+    "published": "2026년 11월 22일 21:51 (KST)",
+    "field": "경제 · 금융정책/증시",
+    "basis": "네이버 뉴스 언론사별 랭킹(많이 본 뉴스, 11/23 01~06시 집계, 06:49 KST 확인)에서 연합뉴스 4위. 같은 ‘블랙먼데이 우려·증안펀드 가동 준비’ 화제가 KBS 5위·MBC 3위·경향신문 5위·디지털타임스 1위(코스피 4800선) 등 여러 언론사 상위권을 동시에 차지해 국내에서 가장 넓게 읽힌 이슈였습니다. 미국에서도 X 트렌딩 뉴스(엔비디아 급락 후 주말 반등, ‘AI 기술주 폭락·닷컴버블 비교’)가 상위에 올라 한·미 공통 최대 화제(AI발 증시 급락)의 한국 측 후속 기사로 골랐습니다. (정확한 클릭 수는 비공개라 랭킹으로 대신 판단)",
+    "summary": "미국 증시 급락으로 국내 증시에 ‘블랙 먼데이’ 우려가 커지자, 이형일 부총리·한은 총재·금융위원장·금감원장(F4)이 22일 긴급 시장상황점검회의를 열고 증권시장안정펀드를 즉시 가동할 수 있도록 준비에 착수하기로 했습니다. 가동되면 2008년 글로벌 금융위기 이후 18년 만입니다. 상장사 자사주 매수주문 한도 3개월 완화, 불법 공매도 3개월 특별 집중감시, 반대매매 모니터링 등 투자자 보호 조치도 함께 내놨습니다.",
+    "titleCard": {
+      "no": 1,
+      "ko": "블랙먼데이 우려에 증안펀드 18년만에 가동되나…F4 \"준비 착수\"",
+      "ultra": "Fearing Black Monday, Korea Readies First Market-Stabilization Fund in 18 Years",
+      "biz": "Amid fears of a ‘Black Monday,’ Korea’s top economic and financial policymakers have begun preparations to activate a stock market stabilization fund for the first time in 18 years.",
+      "note": "‘~우려에’는 Amid fears of / Fearing, ‘증안펀드’는 stock market stabilization fund(market stabilization fund). ‘가동하다’는 activate / deploy, ‘준비 착수’는 begin preparations / move to prepare. ‘F4’는 영어 독자에게 낯설어 top economic and financial policymakers로 풀어 줍니다. ‘18년 만에’는 for the first time in 18 years가 고정 표현입니다."
+    },
+    "cards": [
+      {
+        "no": 2,
+        "ko": "미국 증시 급락에 따라 국내 증시에서 '블랙 먼데이' 우려가 고개를 들면서 경제 금융 수장들이 증권시장안정펀드를 시장 상황에 따라 바로 가동할 수 있도록 준비 작업에 착수하기로 했다.",
+        "ultra": "With Black Monday fears rising, Korea’s financial chiefs moved to ready a stabilization fund.",
+        "biz": "As a sharp drop on Wall Street raised fears of a ‘Black Monday’ in Korean stocks, the country’s top economic and financial officials decided to start preparations so that a stock market stabilization fund can be deployed immediately, depending on market conditions.",
+        "note": "‘고개를 들다’는 raise fears / fears emerge / resurface. ‘수장들’은 chiefs / heads / top officials. ‘~할 수 있도록 준비하다’는 prepare so that ~ can be deployed, ‘시장 상황에 따라’는 depending on market conditions가 정석입니다.",
+        "alts": [
+          "fears resurfaced",
+          "stand ready to deploy",
+          "as market conditions warrant"
+        ]
+      },
+      {
+        "no": 3,
+        "ko": "증권시장안정펀드가 가동되면 글로벌 금융위기 이후 18년 만이 된다.",
+        "ultra": "It would be the first deployment since the 2008 crisis.",
+        "biz": "If activated, it would be the first time the fund has been deployed in 18 years, since the global financial crisis.",
+        "note": "‘~되면 …이 된다’는 가정 구문으로 If activated, it would be ~. ‘글로벌 금융위기’는 the global financial crisis(GFC), 연도를 넣어 the 2008 financial crisis로도 씁니다.",
+        "alts": [
+          "the first since the GFC",
+          "if it is triggered",
+          "marking the first deployment in 18 years"
+        ]
+      },
+      {
+        "no": 4,
+        "ko": "상장기업의 일일 자기주식 매수 주문 수령 한도 제한을 완화하고, 불법 공매도와 관련해 특별집중 감시 기간도 운영할 계획이다.",
+        "ultra": "Buyback limits will ease; illegal short selling faces a crackdown.",
+        "biz": "The authorities also plan to ease the daily cap on share buyback orders by listed companies and to run a special intensive monitoring period targeting illegal short selling.",
+        "note": "‘자기주식 매수’는 share buyback / stock repurchase, ‘한도 제한을 완화하다’는 ease (relax) the cap. ‘불법 공매도’는 illegal (naked) short selling, ‘특별집중 감시’는 special intensive monitoring / crackdown.",
+        "alts": [
+          "relax buyback limits",
+          "stock repurchases",
+          "step up surveillance of illegal short selling"
+        ]
+      },
+      {
+        "no": 5,
+        "ko": "회의에는 신현송 한국은행 총재, 이억원 금융위원장, 이찬진 금융감독원장까지 이른바 'F4'가 참석했다.",
+        "ultra": "Korea’s so-called ‘F4’ attended the meeting.",
+        "biz": "The meeting was attended by the so-called ‘F4,’ including Bank of Korea Governor Shin Hyun-song, Financial Services Commission Chairman Lee Eog-weon, and Financial Supervisory Service Governor Lee Chan-jin.",
+        "note": "‘이른바’는 so-called / dubbed. 직함은 영어에서 이름 앞에 붙입니다(Governor Shin Hyun-song). 금융위원회는 Financial Services Commission(FSC), 금융감독원은 Financial Supervisory Service(FSS)가 공식 영문명입니다.",
+        "alts": [
+          "the so-called ‘F4’ (Korea’s top four economic policymakers)",
+          "was chaired by",
+          "in attendance were"
+        ]
+      },
+      {
+        "no": 6,
+        "ko": "최근 젠슨 황 전 엔비디아 최고경영자(CEO)의 불륜 스캔들과 사퇴로 인공지능(AI) 관련 투자 심리가 얼어붙으면서 한국을 포함해 주요국 증시는 가파르게 하락했다.",
+        "ultra": "Jensen Huang’s exit chilled AI sentiment and sank global markets.",
+        "biz": "Stock markets in major economies, including Korea, have fallen steeply as former Nvidia CEO Jensen Huang’s affair scandal and resignation froze investor sentiment toward AI-related stocks.",
+        "note": "‘투자 심리가 얼어붙다’는 sentiment froze / chilled / soured. ‘가파르게 하락하다’는 fall steeply / slide sharply. 원인(스캔들)을 as ~ 절로 뒤에 두고 결과(증시 하락)를 주절로 앞세우면 기사체 영어가 됩니다.",
+        "alts": [
+          "sentiment soured",
+          "slid sharply",
+          "rattled investors"
+        ]
+      },
+      {
+        "no": 7,
+        "ko": "참석자들은 \"최근 글로벌 AI·반도체 산업, 미국 금리 인상 등을 둘러싼 대내외 불확실성으로 국내외 증시 변동성이 크게 확대됐다\"고 평가했다.",
+        "ultra": "Officials said uncertainty had sharply raised market volatility.",
+        "biz": "Participants noted that volatility in domestic and global stock markets had increased significantly due to internal and external uncertainties surrounding the global AI and semiconductor industries and U.S. interest rate hikes.",
+        "note": "‘대내외 불확실성’은 internal and external (domestic and global) uncertainties, ‘변동성이 확대되다’는 volatility increased / spiked. ‘평가했다’는 assessed / noted. ‘금리 인상’은 rate hikes.",
+        "alts": [
+          "volatility spiked",
+          "heightened uncertainty at home and abroad",
+          "officials assessed that"
+        ]
+      },
+      {
+        "no": 8,
+        "ko": "다만 AI 산업과 관련한 중장기 성장 기대는 여전히 유효하다는 평가가 많다며 과도한 불안 심리나 투매는 경계할 필요가 있다는 데 인식을 같이했다.",
+        "ultra": "They warned against panic selling, citing AI’s long-term growth.",
+        "biz": "However, they agreed that, with many still seeing the AI industry’s medium- to long-term growth prospects as intact, investors should guard against excessive anxiety and panic selling.",
+        "note": "‘유효하다’는 remain valid / intact, ‘투매’는 panic selling / fire sale. ‘~을 경계하다’는 guard against / caution against, ‘인식을 같이하다’는 agree / share the view.",
+        "alts": [
+          "growth prospects remain intact",
+          "cautioned against panic selling",
+          "shared the view that"
+        ]
+      },
+      {
+        "no": 9,
+        "ko": "참석자들은 근본적으로 대외 충격에도 국내 증시가 안정적으로 대응할 수 있도록 시장 체질 개선을 일관되게 추진해나갈 필요가 있다는 데 뜻을 같이했다.",
+        "ultra": "They agreed on structural reforms to make the market more resilient.",
+        "biz": "Participants also agreed on the need to consistently pursue structural improvements so that the Korean stock market can respond stably to external shocks.",
+        "note": "‘체질 개선’은 structural improvement / structural reform, ‘대외 충격’은 external shocks. ‘안정적으로 대응하다’는 respond stably / withstand. 영어에서는 resilient(회복력 있는)로 압축하면 간결합니다.",
+        "alts": [
+          "build resilience against external shocks",
+          "structural reform",
+          "push ahead consistently with"
+        ]
+      }
+    ],
+    "translation": [
+      "※ 저작권 보호를 위해 원문 전체를 옮기지 않고, 기사 핵심을 비즈니스 영어로 압축 정리한 요약 번역입니다. 원문은 아래 ‘원문 기사’ 링크에서 확인하세요.",
+      "Fearing ‘Black Monday,’ Korea Moves to Ready Its First Stock Market Stabilization Fund in 18 Years",
+      "As a sharp sell-off on Wall Street stoked fears of a ‘Black Monday’ in Korean equities, the country’s top economic and financial policymakers decided to begin preparations so that a stock market stabilization fund can be deployed immediately if market conditions require. If activated, it would be the first deployment since the 2008 global financial crisis.",
+      "Deputy Prime Minister and Minister of Economy and Finance Lee Hyoung-il convened an emergency market review meeting at the Government Complex Seoul on November 22, attended by the so-called ‘F4’ — including Bank of Korea Governor Shin Hyun-song, FSC Chairman Lee Eog-weon and FSS Governor Lee Chan-jin — to assess the impact of the recent U.S. market slump on domestic financial markets.",
+      "Investor sentiment toward AI has frozen following former Nvidia CEO Jensen Huang’s scandal and resignation, sending stock markets in major economies, including Korea, sharply lower. All three major U.S. indexes tumbled on November 20, and the KOSPI fell below the 5,000 mark last week. Participants said uncertainties surrounding the AI and semiconductor industries and U.S. rate hikes had significantly increased market volatility, while policy risks such as U.S. data center regulation and tighter chip export controls were heightening concerns over the global AI ecosystem. Still, they agreed that the industry’s medium- to long-term growth prospects remain intact and cautioned against excessive anxiety and panic selling.",
+      "Under existing contingency plans, the authorities will immediately prepare the triggering mechanism for the fund and work to improve its effectiveness. They will also ease the daily cap on listed companies’ share buyback orders for three months starting November 24, run a three-month special monitoring period on illegal short selling, and closely track margin loans, unsettled trades and forced liquidations to prevent cascading selling pressure.",
+      "Over the longer term, participants agreed to consistently pursue structural reforms so the market can withstand external shocks, including the swift launch of a capital market reform task force, and urged the National Assembly to quickly pass related bills and budgets, such as a new productive-finance ISA and stronger retirement pension functions."
+    ],
+    "expressions": [
+      [
+        "1",
+        "블랙 먼데이 우려",
+        "fears of a Black Monday",
+        "Fears of a Black Monday gripped investors over the weekend."
+      ],
+      [
+        "2",
+        "증권시장안정펀드",
+        "stock market stabilization fund",
+        "The government is ready to deploy a stock market stabilization fund."
+      ],
+      [
+        "3",
+        "가동하다 / 투입하다",
+        "activate / deploy",
+        "The fund will be deployed if volatility persists."
+      ],
+      [
+        "4",
+        "준비 작업에 착수하다",
+        "begin preparations",
+        "Regulators began preparations for emergency measures."
+      ],
+      [
+        "5",
+        "18년 만에 처음",
+        "for the first time in 18 years",
+        "The index fell below 5,000 for the first time in months."
+      ],
+      [
+        "6",
+        "시장 상황에 따라",
+        "depending on market conditions",
+        "We may adjust the issuance size depending on market conditions."
+      ],
+      [
+        "7",
+        "긴급 시장상황점검회의",
+        "emergency market review meeting",
+        "The finance minister chaired an emergency market review meeting."
+      ],
+      [
+        "8",
+        "자기주식 매수(자사주 매입)",
+        "share buyback",
+        "The company announced a ₩500 billion share buyback."
+      ],
+      [
+        "9",
+        "한도를 완화하다",
+        "ease the cap",
+        "Authorities eased the cap on daily buyback orders."
+      ],
+      [
+        "10",
+        "불법 공매도",
+        "illegal short selling",
+        "The FSS is stepping up its crackdown on illegal short selling."
+      ],
+      [
+        "11",
+        "특별 집중 감시",
+        "special intensive monitoring",
+        "A special intensive monitoring period will run for three months."
+      ],
+      [
+        "12",
+        "투자 심리가 얼어붙다",
+        "investor sentiment freezes",
+        "Investor sentiment froze after the CEO resigned."
+      ],
+      [
+        "13",
+        "가파르게 하락하다",
+        "fall steeply",
+        "Chip stocks fell steeply on export-control concerns."
+      ],
+      [
+        "14",
+        "대내외 불확실성",
+        "domestic and external uncertainties",
+        "Domestic and external uncertainties have delayed the deal."
+      ],
+      [
+        "15",
+        "변동성이 확대되다",
+        "volatility increases",
+        "Volatility increased sharply ahead of the Fed decision."
+      ],
+      [
+        "16",
+        "투매",
+        "panic selling",
+        "Officials warned against panic selling."
+      ],
+      [
+        "17",
+        "컨틴전시 플랜(비상계획)",
+        "contingency plan",
+        "We activated our contingency plan for funding."
+      ],
+      [
+        "18",
+        "반대매매",
+        "forced liquidation (margin call selling)",
+        "Forced liquidations added to the selling pressure."
+      ],
+      [
+        "19",
+        "연쇄적인 매도 압력",
+        "cascading selling pressure",
+        "Margin calls can trigger cascading selling pressure."
+      ],
+      [
+        "20",
+        "시장 체질 개선",
+        "structural reform of the market",
+        "Structural reform of the market is key to closing the Korea discount."
+      ]
+    ]
+  },
+  {
     "id": "d20261122",
     "date": "2026-11-22",
     "dateLabel": "2026년 11월 22일 (일)",
