@@ -164,5 +164,27 @@ select{font:inherit;font-size:14.5px;padding:8px 10px;border-radius:10px;border:
   .hero{padding:20px 16px}
   .topbar-inner{gap:6px}
 }
+
+/* chunks */
+.tip{background:var(--amber-soft);border-left:4px solid var(--amber);border-radius:10px;padding:14px 16px;font-size:15.5px}
+.tip + .tip{margin-top:12px}
+.tip b{display:block;color:var(--amber);margin-bottom:4px}
+.chunk-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.chunk-card + .chunk-card{margin-top:14px}
+.chunk-card .head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.chunk-card .phrase{font-family:var(--en);font-size:22px;font-weight:700;line-height:1.4;color:var(--green);margin:0}
+.chunk-card .meaning{color:var(--text2);font-size:15.5px;margin-top:8px;line-height:1.65;min-height:1.65em}
+.chunk-card .ex{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
+.chunk-card .ex-en{font-family:var(--en);font-size:15.5px;line-height:1.7;color:var(--text)}
+.chunk-card .ex-ko{color:var(--text2);font-size:14.5px;margin-top:4px;line-height:1.65;min-height:1.65em}
+.mynote-label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin:14px 0 6px}
+textarea.mynote{width:100%;font:inherit;font-size:15px;line-height:1.65;border:1px solid var(--border);border-radius:10px;padding:10px 12px;resize:vertical;min-height:72px;background:var(--surface);color:var(--text);font-family:var(--en)}
+textarea.mynote:focus{outline:2px solid #c7d7fb;border-color:var(--accent)}
+.chunk-page.hide-meanings .chunk-meaning,
+.chunk-page.hide-meanings .chunk-ex-ko{color:transparent;background:var(--border-subtle);border-radius:6px;user-select:none}
+@media (max-width:600px){
+  .chunk-card{padding:16px}
+  .chunk-card .phrase{font-size:19px}
+}
 @media print{.topbar,.footer,.check,.jump,.pager{display:none}}
 section[id],[id^="sec-"]{scroll-margin-top:80px}

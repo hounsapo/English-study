@@ -6,11 +6,12 @@
 
 ## 구조
 ```
-index.html          페이지 틀 (해시 라우팅: #/, #/articles, #/articles/<id>, #/grammar, #/grammar/<id>, #/progress)
+index.html          페이지 틀 (해시 라우팅: #/, #/articles, #/articles/<id>, #/grammar, #/grammar/<id>, #/chunks, #/chunks/<id>, #/progress)
 css/style.css       스타일 (색상 코드: 원문 회색 / Ultra short 파랑 / 비즈니스 번역 굵은 초록+왼쪽 바 / 설명 연회색)
 js/app.js           렌더링 · 진도 저장(localStorage) · 내보내기/가져오기
 data/articles.js    오늘의 학습 기사 데이터  ← 매일 자동화가 여기만 수정
 data/grammar.js     문법 구문 유닛 데이터
+data/chunks.js      표현 덩어리(6유형) 데이터
 screenshots/        확인용 스크린샷
 ```
 
@@ -41,9 +42,27 @@ screenshots/        확인용 스크린샷
 미국 기사를 고른 날에는 `ko` 자리에 영어 원문, `ultra`/`biz`에 한국어 해석 등을 넣고 `translationLabel`을 `"10. 전체 한국어 번역본"`으로 지정하면 됩니다.
 
 ## 진도
-- 기사 / 문법 유닛 / 세부 패턴마다 ‘학습 완료’ 체크 → 브라우저 localStorage(`englishStudy.progress.v1`)에 완료 시각과 함께 저장.
+- 기사 / 문법 유닛 / 세부 패턴 / 표현 유형 / 개별 덩어리마다 ‘학습 완료’ 체크 → 브라우저 localStorage(`englishStudy.progress.v1`)에 완료 시각과 함께 저장.
+- 표현 덩어리 카드의 ‘내 문장 만들기’는 같은 저장소의 `notes`에 보관됩니다. 내보내기·가져오기에 포함됩니다.
 - 진도 페이지에서 JSON 내보내기·가져오기(합치기/덮어쓰기)·초기화.
-- 체크 키: `article:<id>`, `grammar:<unitId>`, `pattern:<patternId>`.
+- 체크 키: `article:<id>`, `grammar:<unitId>`, `pattern:<patternId>`, `chunktype:<typeId>`, `chunk:<itemId>`.
 
 ## 문법 유닛 추가
 `data/grammar.js`의 `window.GRAMMAR` 배열에 같은 형식의 객체를 추가합니다. `explanation` 문단은 `<b>`, `<i>` 태그를 쓸 수 있습니다(그 외 필드는 텍스트로 표시).
+
+## 표현 덩어리 추가
+`data/chunks.js`의 `window.CHUNKS` 배열에 같은 형식의 유형 객체를 추가합니다. `items[].id`는 진도와 메모 키로 쓰이므로 바꾸지 마세요.
+
+```js
+{
+  "id": "collocations",
+  "title": "연어",
+  "en": "Collocations",
+  "summary": "한 줄 소개",
+  "explanation": ["설명 문단"],
+  "items": [
+    { "id": "col-make-a-decision", "chunk": "make a decision", "meaning": "결정하다",
+      "exampleEn": "The board will make a decision next week.", "exampleKo": "이사회는 다음 주에 결정을 내릴 것이다." }
+  ]
+}
+```
