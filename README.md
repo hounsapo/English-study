@@ -53,6 +53,8 @@ screenshots/        확인용 스크린샷
 ## 표현 덩어리 추가
 `data/chunks.js`의 `window.CHUNKS` 배열에 같은 형식의 유형 객체를 추가합니다. `items[].id`는 진도와 메모 키로 쓰이므로 바꾸지 마세요.
 
+유형 안에는 `clusters`(의미 묶음)와 `compares`(헷갈리는 짝)가 있고, 각 항목은 `emoji`와 `similar` / `opposite` / `derived` 가지를 가집니다. 사이트에 있는 관련 표현은 `id`와 `typeId`로 연결됩니다.
+
 ```js
 {
   "id": "collocations",

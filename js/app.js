@@ -237,20 +237,176 @@
     return h;
   }
 
+
+  function itemById(id) {
+    var found = null;
+    CHUNKS.forEach(function (t) { (t.items || []).forEach(function (it) { if (it.id === id) found = { type: t, item: it }; }); });
+    return found;
+  }
+  function chunkHref(typeId, itemId) { return "#/chunks/" + encodeURIComponent(typeId) + "/" + encodeURIComponent(itemId); }
+  function relLink(x) {
+    var body = '<span class="rel-phrase">' + esc(x.phrase) + '</span><span class="rel-meaning">' + esc(x.meaning) + "</span>";
+    if (x.id && x.typeId) return '<a class="rel-item is-link" href="' + esc(chunkHref(x.typeId, x.id)) + '">' + body + "</a>";
+    return '<span class="rel-item">' + body + "</span>";
+  }
+  function relMap(it) {
+    var groups = [
+      { key: "similar", label: "비슷 ≈", cls: "is-similar" },
+      { key: "derived", label: "파생 →", cls: "is-derived" },
+      { key: "opposite", label: "반대 ↔", cls: "is-opposite" }
+    ];
+    var has = groups.some(function (g) { return it[g.key] && it[g.key].length; });
+    if (!has) return "";
+    var h = '<aside class="rel-map" aria-label="비슷한 표현, 파생 표현, 반대 표현"><div class="rel-hub">' + esc(it.emoji || "") + " " + esc(it.chunk) + '</div><div class="rel-branches">';
+    groups.forEach(function (g) {
+      var arr = it[g.key] || [];
+      if (!arr.length) return;
+      h += '<div class="rel-col ' + g.cls + '"><div class="rel-k">' + g.label + "</div>" + arr.map(relLink).join("") + "</div>";
+    });
+    return h + "</div></aside>";
+  }
+  function vizWrap(cls, label, inner) {
+    return '<div class="viz ' + cls + '" role="img" aria-label="' + esc(label) + '">' + inner + "</div>";
+  }
+  function clusterVisual(cluster, items) {
+    var kind = cluster.visual || "theme";
+    var vd = cluster.visualData || {};
+    var label = cluster.title + " 그림";
+    if (kind === "mindmap") {
+      var inner = '<div class="viz-hub">' + esc(vd.center || cluster.title) + (vd.centerKo ? '<div class="viz-ko">' + esc(vd.centerKo) + "</div>" : "") + "</div>";
+      inner += '<div class="viz-spokes">' + items.map(function (it) {
+        return '<span class="viz-chip">' + esc(it.emoji || "") + " " + esc(it.chunk) + "</span>";
+      }).join("") + "</div>";
+      return vizWrap("viz-mindmap", label, inner);
+    }
+    if (kind === "flow") {
+      var steps = vd.steps || [];
+      var inner = steps.map(function (s, i) {
+        var box = '<div class="viz-step"><div class="viz-en">' + esc(s.en || s) + "</div>" + (s.ko ? '<div class="viz-ko">' + esc(s.ko) + "</div>" : "") + "</div>";
+        return (i ? '<div class="viz-arrow" aria-hidden="true">→</div>' : "") + box;
+      }).join("");
+      return vizWrap("viz-flow", label, inner);
+    }
+    if (kind === "formality") {
+      var arr = vd.items || [];
+      var inner = '<div class="viz-scale-labels"><span class="viz-ko">일상·편한 말</span><span class="viz-ko">격식·공손한 말</span></div>';
+      inner += '<div class="viz-bar" aria-hidden="true"></div><div class="viz-marks">';
+      inner += arr.map(function (s) {
+        var left = ((s.level - 1) / 3) * 100;
+        return '<div class="viz-mark" style="left:' + left + '%"><span class="viz-en">' + esc(s.label) + '</span><span class="viz-ko">' + esc(s.ko || "") + "</span></div>";
+      }).join("") + "</div>";
+      return vizWrap("viz-formality", label, inner);
+    }
+    if (kind === "spatial") {
+      var inner = (vd.preps || []).map(function (pr) {
+        return '<div class="viz-prep"><div class="viz-prep-word">' + esc(pr.prep) + '</div><div class="viz-ko">' + esc(pr.ko) + '</div><div class="viz-prep-ex">' + (pr.examples || []).map(function (e) { return "<div>" + esc(e) + "</div>"; }).join("") + "</div></div>";
+      }).join("");
+      return vizWrap("viz-spatial", label, inner);
+    }
+    if (kind === "inout") {
+      var col = function (title, list) {
+        return '<div class="viz-io"><div class="viz-io-h">' + esc(title) + "</div>" + (list || []).map(function (s) { return '<div class="viz-chip">' + esc(s) + "</div>"; }).join("") + "</div>";
+      };
+      var inner = col("→ " + (vd.out || "일으키다"), vd.outItems) + '<div class="viz-arrow" aria-hidden="true">⇄</div>' + col("← " + (vd.in || "기울이다"), vd.inItems);
+      return vizWrap("viz-inout", label, inner);
+    }
+    if (kind === "process") {
+      var steps = vd.steps || items.map(function (it) { return it.chunk; });
+      var inner = steps.map(function (s, i) {
+        return (i ? '<div class="viz-arrow" aria-hidden="true">→</div>' : "") + '<div class="viz-step"><div class="viz-num">' + (i + 1) + '</div><div class="viz-en">' + esc(s) + "</div></div>";
+      }).join("");
+      return vizWrap("viz-flow viz-process", label, inner);
+    }
+    if (kind === "scale") {
+      var inner = '<div class="viz-scale-labels"><span class="viz-en">' + esc(vd.low || "") + '</span><span class="viz-en">' + esc(vd.high || "") + '</span></div><div class="viz-bar" aria-hidden="true"></div>';
+      inner += '<div class="viz-marks">' + items.map(function (it, i) {
+        var left = items.length === 1 ? 50 : (i / (items.length - 1)) * 100;
+        return '<div class="viz-mark" style="left:' + left + '%"><span>' + esc(it.emoji || "") + " " + esc(it.chunk) + "</span></div>";
+      }).join("") + "</div>";
+      return vizWrap("viz-formality viz-scale", label, inner);
+    }
+    if (kind === "timeline") {
+      var inner = '<div class="viz-time"><div class="viz-step"><div class="viz-en">' + esc(vd.start || "") + '</div><div class="viz-ko">' + esc(vd.startKo || "") + '</div></div><div class="viz-bar" style="flex:1;margin:18px 10px 0"></div><div class="viz-step"><div class="viz-en">' + esc(vd.end || "") + '</div><div class="viz-ko">' + esc(vd.endKo || "") + "</div></div></div>";
+      return vizWrap("viz-timeline", label, inner);
+    }
+    if (kind === "fork") {
+      var inner = '<div class="viz-fork">';
+      inner += '<div class="viz-step viz-from"><div class="viz-en">' + esc(vd.from || "앞말") + "</div></div>";
+      inner += '<svg class="viz-fork-svg" viewBox="0 0 80 80" aria-hidden="true"><path d="M8 40 H40 M40 40 L72 16 M40 40 L72 64" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/></svg>';
+      inner += '<div class="viz-fork-ends">';
+      if (vd.mid) inner += '<div class="viz-step"><div class="viz-en">' + esc(vd.mid) + '</div><div class="viz-ko">' + esc(vd.midKo || "") + "</div></div>";
+      inner += '<div class="viz-step"><div class="viz-en">' + esc(vd.left || "") + '</div><div class="viz-ko">' + esc(vd.leftKo || "") + "</div></div>";
+      inner += '<div class="viz-step"><div class="viz-en">' + esc(vd.right || "") + '</div><div class="viz-ko">' + esc(vd.rightKo || "") + "</div></div>";
+      inner += "</div></div>";
+      return vizWrap("viz-fork-wrap", label, inner);
+    }
+    if (kind === "iceberg") {
+      var svg = '<svg viewBox="0 0 260 160" class="viz-iceberg-svg" aria-hidden="true"><defs><linearGradient id="iceg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbeafe"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect x="0" y="70" width="260" height="90" fill="#bfdbfe" opacity=".55"/><path d="M70 70 L110 18 L150 70 Z" fill="url(#iceg)" stroke="#2563eb" stroke-width="1.5"/><path d="M70 70 L40 150 L180 150 L150 70 Z" fill="#3b82f6" opacity=".45" stroke="#1d4ed8" stroke-width="1.5"/><line x1="16" y1="70" x2="244" y2="70" stroke="#1d4ed8" stroke-dasharray="4 4"/><text x="130" y="14" text-anchor="middle" font-size="11" fill="#1e3a8a">the tip</text><text x="130" y="132" text-anchor="middle" font-size="11" fill="#1e3a8a">아래가 더 크다</text></svg>';
+      return vizWrap("viz-iceberg", label, svg + '<div class="viz-ko" style="text-align:center">눈에 보이는 것은 일부, 진짜 규모는 수면 아래</div>');
+    }
+    if (kind === "bubbles") {
+      var inner = items.map(function (it) {
+        return '<div class="viz-bubble"><span>' + esc(it.emoji || "") + '</span><div class="viz-en">' + esc(it.chunk) + "</div></div>";
+      }).join("");
+      return vizWrap("viz-bubbles", label, inner);
+    }
+    if (kind === "highlight" || kind === "zoom" || kind === "theme" || kind === "contrast") {
+      var inner = items.map(function (it) {
+        return '<span class="viz-chip">' + esc(it.emoji || "") + " " + esc(it.chunk) + "</span>";
+      }).join("");
+      return vizWrap("viz-theme", label, inner);
+    }
+    return "";
+  }
+  function chunkCard(it, i, total) {
+    var noteId = "chunk:" + it.id;
+    var note = getNote(noteId);
+    return '<article class="chunk-card" id="chunk-' + esc(it.id) + '"><div class="head"><div><span class="pill" style="margin-bottom:8px">' + (i + 1) + " / " + total + '</span><h3 class="phrase"><span class="chunk-emoji" aria-hidden="true">' + esc(it.emoji || "") + "</span> " + esc(it.chunk) + "</h3></div>" +
+      checkbox(noteId, "외웠어요", true) + "</div>" +
+      '<div class="meaning chunk-meaning">' + esc(it.meaning) + "</div>" +
+      '<div class="ex"><div class="ex-en">' + esc(it.exampleEn) + '</div><div class="ex-ko chunk-ex-ko">' + esc(it.exampleKo) + "</div></div>" +
+      relMap(it) +
+      '<label class="mynote-label" for="note-' + esc(it.id) + '">내 문장 만들기</label>' +
+      '<textarea class="mynote" id="note-' + esc(it.id) + '" data-note="' + esc(noteId) + '" rows="2" placeholder="이 덩어리를 써서 내 상황의 영어 문장을 쓰고, 소리 내어 말해 보세요.">' + esc(note) + "</textarea></article>";
+  }
+  function compareCard(c) {
+    function side(id, phrase, meaning, note) {
+      var found = id ? itemById(id) : null;
+      var ch = phrase, mn = meaning, em = "", href = "";
+      if (found) {
+        ch = found.item.chunk; mn = found.item.meaning; em = found.item.emoji || "";
+        href = chunkHref(found.type.id, found.item.id);
+      }
+      var title = (em ? em + " " : "") + ch;
+      var head = href ? '<a href="' + esc(href) + '">' + esc(title) + "</a>" : '<span class="viz-en">' + esc(title) + "</span>";
+      return '<div class="compare-side">' + head + '<div class="compare-ko">' + esc(mn || "") + "</div>" + (note ? '<div class="small muted compare-ko">' + esc(note) + "</div>" : "") + "</div>";
+    }
+    var h = '<article class="compare-card"><div class="compare-title">' + esc(c.title) + '</div><div class="compare-pair">';
+    h += side(c.leftId, c.leftPhrase, c.leftMeaning, c.leftNote);
+    h += '<div class="compare-vs" aria-hidden="true">vs</div>';
+    h += side(c.rightId, c.rightPhrase, c.rightMeaning, c.rightNote);
+    h += '</div><p class="compare-diff">' + esc(c.diff) + "</p></article>";
+    return h;
+  }
+
   function chunkTypeCard(t, eyebrow) {
     var key = "chunktype:" + t.id, d = isDone(key);
     var n = (t.items || []).length, done = typeChunkDone(t);
+    var nc = (t.clusters || []).length;
     return '<a class="unit-card' + (d ? " done" : "") + '" href="#/chunks/' + esc(t.id) + '">' + (eyebrow ? '<div class="pill accent" style="margin-bottom:8px">' + esc(eyebrow) + "</div>" : "") +
       '<div class="row" style="justify-content:space-between"><div class="t">' + esc(t.title) + "</div>" + (d ? '<span class="done-badge">✓ 완료</span>' : "") + '</div><div class="e">' + esc(t.en) + '</div><div class="s">' + esc(t.summary) + "</div>" +
-      bar(done, n) + '<div class="small muted" style="margin-top:6px">외운 표현 ' + done + " / " + n + "</div></a>";
+      bar(done, n) + '<div class="small muted" style="margin-top:6px">묶음 ' + nc + "개 · 외운 표현 " + done + " / " + n + "</div></a>";
   }
 
   function viewChunks() {
     var s = stats();
-    var h = '<h1>표현 덩어리</h1><p class="lead">영어를 단어 하나씩 조합하지 않고, 덩어리(Chunk / Collocation / Idiom)로 통째로 외우면 말할 때 머뭇거림이 줄고 표현이 자연스러워집니다. 아래 여섯 유형을 하나씩 익히고, 각 표현마다 내 상황의 문장을 만들어 소리 내어 말해 보세요.</p>';
+    var nClusters = CHUNKS.reduce(function (n, t) { return n + (t.clusters || []).length; }, 0);
+    var h = '<h1>표현 덩어리</h1><p class="lead">영어를 단어 하나씩 조합하지 않고, 덩어리(Chunk / Collocation / Idiom)로 통째로 외우면 말할 때 머뭇거림이 줄고 표현이 자연스러워집니다. 비슷한 표현끼리 묶어 두었고, 각 카드에서 비슷·반대·파생 가지로 넓혀 외울 수 있어요.</p>';
     h += '<div class="grid-3" style="margin-bottom:22px">' + statBox("완료한 유형", s.chunkTypes) + statBox("외운 표현", s.chunks) + "</div>";
     h += '<div class="grid">' + CHUNKS.map(function (t) { return chunkTypeCard(t); }).join("") + "</div>";
     h += '<section class="section"><div class="section-title">💡 덩어리 암기 학습 팁</div>';
+    h += '<div class="tip"><b>비슷한 표현끼리 묶기</b>여섯 유형 안에 의미 묶음 ' + nClusters + "개가 있습니다. 묶음의 한 줄 설명과 그림을 먼저 보고, 구성원이 어떻게 다른지 비교하세요.</div>";
+    h += '<div class="tip"><b>반대·파생으로 넓히기</b>각 카드 아래 초록 가지는 비슷한 말(≈), 파란 가지는 파생형(→), 빨간 가지는 반대말(↔)입니다. 사이트에 있는 표현은 눌러 바로 이동할 수 있어요.</div>';
     h += '<div class="tip"><b>나만의 표현 노트 만들기</b>단순 단어장이 아니라 동사+명사, 전치사+명사 형태의 최소 2~3단어 조합으로 기록하세요. 각 카드의 ‘내 문장 만들기’ 칸이 그 노트 역할을 합니다.</div>';
     h += '<div class="tip"><b>패턴에 내 상황 적용하기</b>예컨대 <span style="font-family:var(--en);font-weight:600">I’m looking forward to ~ing</span>라는 덩어리를 외웠다면, 바로 <span style="font-family:var(--en);font-weight:600">I’m looking forward to taking a rest this weekend.</span>처럼 자신만의 문장을 만들어 입으로 뱉어 보는 것이 중요합니다.</div>';
     h += "</section>";
@@ -263,25 +419,53 @@
     if (idx < 0) return notFound();
     var t = CHUNKS[idx], key = "chunktype:" + t.id;
     var items = t.items || [];
+    var byId = {};
+    items.forEach(function (it) { byId[it.id] = it; });
+    var clusters = t.clusters || [];
+    var compares = t.compares || [];
     var done = typeChunkDone(t);
     var h = '<div class="chunk-page' + (hideMeanings ? " hide-meanings" : "") + '">';
     h += '<div class="breadcrumb"><a href="#/chunks">표현 덩어리</a> › ' + esc(t.title) + "</div>";
     h += '<div class="row" style="justify-content:space-between"><div><h1 style="margin-bottom:0">' + esc(t.title) + '</h1><div class="muted" style="font-family:var(--en)">' + esc(t.en) + "</div></div>" + checkbox(key, "유형 학습 완료") + "</div>";
     h += '<p class="lead" style="margin-top:10px">' + esc(t.summary) + "</p>";
     h += '<section class="card explain"><h3>📖 설명</h3>' + (t.explanation || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</section>";
-    h += '<div class="row" style="justify-content:space-between;margin:18px 0 8px;align-items:center"><div><b>표현 ' + items.length + '개</b> <span class="small muted">외웠어요 ' + done + ' / ' + items.length + '</span></div>' +
+    h += '<div class="row" style="justify-content:space-between;margin:18px 0 8px;align-items:center"><div><b>표현 ' + items.length + '개</b> <span class="small muted">묶음 ' + clusters.length + "개 · 외웠어요 " + done + " / " + items.length + "</span></div>" +
       '<button type="button" class="btn" id="btnHideMeanings" aria-pressed="' + (hideMeanings ? "true" : "false") + '">' + (hideMeanings ? "뜻 보이기" : "뜻 가리기") + "</button></div>";
     h += '<div style="margin-bottom:16px">' + bar(done, items.length) + "</div>";
-    h += items.map(function (it, i) {
-      var noteId = "chunk:" + it.id;
-      var note = getNote(noteId);
-      return '<article class="chunk-card" id="chunk-' + esc(it.id) + '"><div class="head"><div><span class="pill" style="margin-bottom:8px">' + (i + 1) + " / " + items.length + '</span><h3 class="phrase">' + esc(it.chunk) + "</h3></div>" +
-        checkbox(noteId, "외웠어요", true) + "</div>" +
-        '<div class="meaning chunk-meaning">' + esc(it.meaning) + "</div>" +
-        '<div class="ex"><div class="ex-en">' + esc(it.exampleEn) + '</div><div class="ex-ko chunk-ex-ko">' + esc(it.exampleKo) + "</div></div>" +
-        '<label class="mynote-label" for="note-' + esc(it.id) + '">내 문장 만들기</label>' +
-        '<textarea class="mynote" id="note-' + esc(it.id) + '" data-note="' + esc(noteId) + '" rows="2" placeholder="이 덩어리를 써서 내 상황의 영어 문장을 쓰고, 소리 내어 말해 보세요.">' + esc(note) + "</textarea></article>";
-    }).join("");
+    if (clusters.length) {
+      h += '<div class="jump" aria-label="묶음 이동">' + clusters.map(function (c) {
+        return '<button type="button" data-jump="cluster-' + esc(c.id) + '">' + esc(c.title) + "</button>";
+      }).join("") + (compares.length ? '<button type="button" data-jump="sec-compare">헷갈리는 짝</button>' : "") + "</div>";
+    }
+    var used = {};
+    var num = 0;
+    if (clusters.length) {
+      clusters.forEach(function (c) {
+        var cItems = (c.itemIds || []).map(function (cid) { return byId[cid]; }).filter(Boolean);
+        cItems.forEach(function (it) { used[it.id] = true; });
+        h += '<section class="cluster" id="cluster-' + esc(c.id) + '">';
+        h += '<div class="cluster-head"><h2 class="cluster-title">' + esc(c.title) + '</h2><div class="small muted">표현 ' + cItems.length + "개</div></div>";
+        if (c.hook) h += '<p class="cluster-hook">' + esc(c.hook) + "</p>";
+        h += clusterVisual(c, cItems);
+        h += cItems.map(function (it) { num += 1; return chunkCard(it, num - 1, items.length); }).join("");
+        h += "</section>";
+      });
+    }
+    var rest = items.filter(function (it) { return !used[it.id]; });
+    if (rest.length) {
+      h += '<section class="cluster" id="cluster-other"><div class="cluster-head"><h2 class="cluster-title">그 밖의 표현</h2></div>';
+      h += rest.map(function (it) { num += 1; return chunkCard(it, num - 1, items.length); }).join("");
+      h += "</section>";
+    }
+    if (!clusters.length) {
+      h += items.map(function (it, i) { return chunkCard(it, i, items.length); }).join("");
+    }
+    if (compares.length) {
+      h += '<section class="section" id="sec-compare"><div class="section-title">⚖️ 헷갈리기 쉬운 짝</div>';
+      h += '<p class="lead">뜻이 비슷해 보이거나 모양이 닮아 섞이기 쉬운 짝입니다. 차이를 읽고, 카드의 반대·비슷 가지와 함께 외워 보세요.</p>';
+      h += compares.map(compareCard).join("");
+      h += "</section>";
+    }
     h += '<div class="card row" style="justify-content:space-between;margin-top:26px"><div><b>이 유형을 다 공부했나요?</b><div class="small muted">체크하면 진도에 반영돼요.</div></div>' + checkbox(key, "유형 학습 완료") + "</div>";
     var prev = CHUNKS[idx - 1], next = CHUNKS[idx + 1];
     h += '<div class="pager">' + (prev ? '<a class="btn" href="#/chunks/' + esc(prev.id) + '">← ' + esc(prev.title) + "</a>" : "<span></span>") + (next ? '<a class="btn" href="#/chunks/' + esc(next.id) + '">' + esc(next.title) + " →</a>" : "<span></span>") + "</div>";
@@ -324,7 +508,14 @@
       if (tObj) pageTitle = tObj.title;
     }
     document.title = pageTitle + " · 영어 공부방";
-    if (!route._keepScroll) window.scrollTo(0, 0);
+    var jumpId = (section === "chunks" && parts[2]) ? ("chunk-" + decodeURIComponent(parts[2])) : null;
+    var jumpEl = jumpId ? document.getElementById(jumpId) : null;
+    if (jumpEl) {
+      route._keepScroll = false;
+      window.setTimeout(function () { if (jumpEl.scrollIntoView) jumpEl.scrollIntoView({ behavior: "smooth", block: "start" }); jumpEl.classList.add("flash"); }, 0);
+    } else if (!route._keepScroll) {
+      window.scrollTo(0, 0);
+    }
     route._keepScroll = false;
   }
   function rerender() { flushNotes(); var y = window.scrollY; route._keepScroll = true; route(); window.scrollTo(0, y); }

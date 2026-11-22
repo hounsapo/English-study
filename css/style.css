@@ -186,5 +186,81 @@ textarea.mynote:focus{outline:2px solid #c7d7fb;border-color:var(--accent)}
   .chunk-card{padding:16px}
   .chunk-card .phrase{font-size:19px}
 }
+
+.chunk-emoji{margin-right:4px}
+.cluster{margin-top:28px;padding-top:8px}
+.cluster-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin:0 0 8px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.cluster-title{font-size:19px;margin:0}
+.cluster-hook{color:var(--text2);margin:0 0 12px;font-size:15.5px;line-height:1.7}
+.chunk-card.flash{outline:3px solid #93c5fd;outline-offset:2px;transition:outline-color .8s}
+/* visuals */
+.viz{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin:0 0 16px;box-shadow:var(--shadow)}
+.viz-ko{color:var(--text3);font-size:12.5px;margin-top:2px}
+.viz-en{font-family:var(--en);font-weight:600;font-size:14px}
+.viz-mindmap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.viz-hub{background:var(--accent-soft);color:var(--accent);border:2px solid #c7d7fb;border-radius:999px;padding:10px 22px;text-align:center;font-family:var(--en);font-weight:700;font-size:20px;min-width:110px}
+.viz-spokes,.viz-theme,.viz-bubbles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.viz-chip{font-family:var(--en);font-size:13.5px;background:var(--green-soft);color:var(--green);border:1px solid #9bd3ae;border-radius:999px;padding:5px 12px}
+.viz-flow,.viz-process,.viz-inout,.viz-time{display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;gap:8px}
+.viz-step{background:var(--accent-soft);border:1px solid #c7d7fb;border-radius:10px;padding:8px 12px;text-align:center;min-width:92px}
+.viz-num{width:22px;height:22px;border-radius:999px;background:#fff;color:var(--accent);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px}
+.viz-arrow{font-size:20px;color:var(--accent);display:flex;align-items:center;padding:0 2px}
+.viz-formality{padding-bottom:28px}
+.viz-scale-labels{display:flex;justify-content:space-between;font-size:13px;color:var(--text2);margin-bottom:8px;gap:8px}
+.viz-bar{height:8px;background:linear-gradient(90deg,#bbf7d0,#93c5fd,#c4b5fd);border-radius:999px;position:relative}
+.viz-marks{position:relative;height:52px;margin-top:8px}
+.viz-mark{position:absolute;transform:translateX(-50%);text-align:center;width:max-content;max-width:140px}
+.viz-mark .viz-en{display:block;font-size:12px;line-height:1.3}
+.viz-spatial{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.viz-prep{border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;background:var(--border-subtle)}
+.viz-prep-word{font-family:var(--en);font-weight:800;font-size:20px;color:var(--accent)}
+.viz-prep-ex{font-family:var(--en);font-size:12.5px;color:var(--text2);margin-top:6px;line-height:1.5}
+.viz-io{flex:1;min-width:140px}
+.viz-io-h{font-weight:700;font-size:13.5px;color:var(--text2);margin-bottom:8px;text-align:center}
+.viz-fork-wrap{overflow:hidden}
+.viz-fork{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.viz-fork-svg{width:56px;height:56px;flex:0 0 56px}
+.viz-fork-ends{display:flex;flex-direction:column;gap:8px}
+.viz-iceberg-svg{width:100%;max-width:320px;height:auto;display:block;margin:0 auto 6px}
+.viz-bubble{background:#fff;border:1px solid #c7d7fb;border-radius:18px 18px 18px 4px;padding:10px 12px;max-width:220px;box-shadow:var(--shadow)}
+.viz-bubble span{font-size:20px}
+/* relation branches */
+.rel-map{margin-top:14px;padding-top:12px;border-top:1px dashed var(--border)}
+.rel-hub{font-family:var(--en);font-weight:700;color:var(--text);margin-bottom:10px;font-size:14.5px}
+.rel-branches{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.rel-col{border-radius:10px;padding:10px 10px 8px;border:1px solid var(--border)}
+.rel-col.is-similar{background:var(--green-soft);border-color:#9bd3ae}
+.rel-col.is-derived{background:var(--accent-soft);border-color:#c7d7fb}
+.rel-col.is-opposite{background:var(--red-soft);border-color:#f3c7c7}
+.rel-k{font-size:12.5px;font-weight:700;margin-bottom:6px}
+.is-similar .rel-k{color:var(--green)}
+.is-derived .rel-k{color:var(--accent)}
+.is-opposite .rel-k{color:var(--red)}
+.rel-item{display:block;padding:5px 4px;border-radius:6px;text-decoration:none;color:inherit}
+a.rel-item.is-link:hover{background:rgba(255,255,255,.7)}
+.rel-phrase{display:block;font-family:var(--en);font-weight:600;font-size:13.5px;color:var(--text)}
+a.rel-item .rel-phrase{color:var(--accent)}
+.rel-meaning{display:block;font-size:12.5px;color:var(--text2);line-height:1.5}
+/* compares */
+.compare-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-top:12px}
+.compare-title{font-family:var(--en);font-weight:700;font-size:16px;margin-bottom:12px}
+.compare-pair{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.compare-side{background:var(--border-subtle);border-radius:10px;padding:12px;font-family:var(--en);font-weight:600}
+.compare-side a{font-weight:700}
+.compare-ko{font-family:var(--font);font-weight:500;color:var(--text2);font-size:14px;margin-top:4px}
+.compare-vs{display:flex;align-items:center;font-weight:800;color:var(--text3);font-family:var(--en)}
+.compare-diff{margin:12px 0 0;color:var(--text2);font-size:15px;line-height:1.7}
+.chunk-page.hide-meanings .cluster-hook,
+.chunk-page.hide-meanings .rel-meaning,
+.chunk-page.hide-meanings .compare-diff,
+.chunk-page.hide-meanings .compare-ko,
+.chunk-page.hide-meanings .viz-ko{color:transparent;background:var(--border-subtle);border-radius:6px;user-select:none}
+@media (max-width:600px){
+  .compare-pair{grid-template-columns:1fr;justify-items:center}
+  .compare-vs{transform:rotate(90deg);padding:0}
+  .viz-marks{height:auto;display:flex;flex-wrap:wrap;justify-content:space-between;position:static}
+  .viz-mark{position:static;transform:none;max-width:46%;margin-top:8px}
+  .viz-formality{padding-bottom:8px}
+}
 @media print{.topbar,.footer,.check,.jump,.pager{display:none}}
 section[id],[id^="sec-"]{scroll-margin-top:80px}
