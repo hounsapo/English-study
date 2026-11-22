@@ -6,12 +6,14 @@
 
 ## 구조
 ```
-index.html          페이지 틀 (해시 라우팅: #/, #/articles, #/articles/<id>, #/grammar, #/grammar/<id>, #/chunks, #/chunks/<id>, #/progress)
+index.html          페이지 틀 (해시 라우팅: #/, #/articles, #/articles/<id>, #/grammar, #/grammar/<id>, #/chunks, #/chunks/<id>, #/review, #/review/recall, #/review/cloze, #/review/shadow, #/review/misses, #/progress)
 css/style.css       스타일 (색상 코드: 원문 회색 / Ultra short 파랑 / 비즈니스 번역 굵은 초록+왼쪽 바 / 설명 연회색)
+js/study.js         간격 반복 · 채점 · 기사↔표현 연결 · 음성 읽기 (DOM 없음)
 js/app.js           렌더링 · 진도 저장(localStorage) · 내보내기/가져오기
 data/articles.js    오늘의 학습 기사 데이터  ← 매일 자동화가 여기만 수정
 data/grammar.js     문법 구문 유닛 데이터
 data/chunks.js      표현 덩어리(6유형) 데이터
+tests/run.js        node + jsdom 테스트 (speechSynthesis 목)
 screenshots/        확인용 스크린샷
 ```
 
@@ -42,10 +44,21 @@ screenshots/        확인용 스크린샷
 미국 기사를 고른 날에는 `ko` 자리에 영어 원문, `ultra`/`biz`에 한국어 해석 등을 넣고 `translationLabel`을 `"10. 전체 한국어 번역본"`으로 지정하면 됩니다.
 
 ## 진도
-- 기사 / 문법 유닛 / 세부 패턴 / 표현 유형 / 개별 덩어리마다 ‘학습 완료’ 체크 → 브라우저 localStorage(`englishStudy.progress.v1`)에 완료 시각과 함께 저장.
+- 기사 / 문법 유닛 / 세부 패턴 / 표현 유형 / 개별 덩어리마다 ‘학습 완료’ 체크 → 브라우저 localStorage(`englishStudy.progress.v1`)에 완료 시각과 함께 저장. 저장소 키 이름은 바꾸지 않습니다.
 - 표현 덩어리 카드의 ‘내 문장 만들기’는 같은 저장소의 `notes`에 보관됩니다. 내보내기·가져오기에 포함됩니다.
-- 진도 페이지에서 JSON 내보내기·가져오기(합치기/덮어쓰기)·초기화.
-- 체크 키: `article:<id>`, `grammar:<unitId>`, `pattern:<patternId>`, `chunktype:<typeId>`, `chunk:<itemId>`.
+- ‘외웠어요’/‘익혔어요’를 체크하면 간격 반복(1·3·7·21·60일)에 등록됩니다. 기사 학습 완료 시 해당 기사의 핵심 표현도 함께 등록됩니다. 체크를 해제해도 복습 카드는 지우지 않습니다.
+- 진도 페이지에서 JSON 내보내기(버전 3: items, notes, srs, settings, activity, misses)·가져오기(합치기/덮어쓰기, v1/v2 파일은 자동 이전)·초기화.
+- 체크 키: `article:<id>`, `grammar:<unitId>`, `pattern:<patternId>`, `chunktype:<typeId>`, `chunk:<itemId>`. 기사 핵심 표현은 `expr:<articleId>:<n>`.
+
+## 복습 · 기사 연결 · 발음
+- 홈의 ‘오늘의 복습’ 위젯과 `#/review`에서 기한이 된 카드를 보고, 하루 목표(기본 새 표현 5개 + 복습 10개)를 조절할 수 있습니다. 연속 학습일과 최근 30일 달력은 홈·진도 페이지에 있습니다.
+- 떠올리기(`#/review/recall`): 한국어 뜻을 보고 영어를 말하거나 적고, 쉬움/보통/어려움으로 다음 간격을 정합니다. 빈칸 채우기(`#/review/cloze`)는 예문에서 덩어리를 가리고 같은 방식으로 채점합니다.
+- 듣고 따라 말하기(`#/review/shadow`): 브라우저 Web Speech API(`speechSynthesis`, en-US, 0.8×/1×)로 재생한 뒤 따라 말할 시간을 줍니다. 지원되는 브라우저에서는 마이크 녹음 후 바로 들어볼 수 있고, 지원하지 않으면 문장만 보여 줍니다. 표현·예문·기사 문장에도 듣기 버튼이 있습니다.
+- 오답 노트(`#/review/misses`)는 어려움이거나 틀린 답을 모읍니다.
+- 기사 영어 문장에 `data/chunks.js`의 표현이 나타나면 실행 시점에 찾아 하이라이트하고 카드로 연결합니다. 앞으로 매일 추가되는 기사에도 별도 하드코딩 없이 동작합니다. 카드에는 ‘기사에서 만난 문장’이 표시됩니다.
+
+## 테스트
+`node tests/run.js` — Node와 jsdom이 필요합니다 (`npm install jsdom`). speechSynthesis는 테스트에서 목으로 대체합니다.
 
 ## 문법 유닛 추가
 `data/grammar.js`의 `window.GRAMMAR` 배열에 같은 형식의 객체를 추가합니다. `explanation` 문단은 `<b>`, `<i>` 태그를 쓸 수 있습니다(그 외 필드는 텍스트로 표시).

@@ -29,24 +29,67 @@
   }
 
   /* ---------- progress store ---------- */
-  var mem = { items: {}, notes: {} };
+  var mem = Study.emptyMem();
+  var corpusCache = null;
+  function getCorpus() {
+    if (!corpusCache) corpusCache = Study.scanCorpus(ARTICLES, CHUNKS);
+    return corpusCache;
+  }
+  function migrateExisting() {
+    var rows = [];
+    Object.keys(mem.items || {}).forEach(function (k) {
+      if (k.indexOf("chunk:") === 0 || k.indexOf("pattern:") === 0) {
+        rows.push({ key: k, iso: mem.items[k] });
+      }
+      if (k.indexOf("article:") === 0) {
+        var art = ARTICLES.filter(function (a) { return a.id === k.slice(8); })[0];
+        if (art) {
+          Study.expressionKeys(art).forEach(function (ek) {
+            rows.push({ key: ek, iso: mem.items[k] });
+          });
+        }
+      }
+    });
+    return Study.migrateDone(mem, rows);
+  }
   function load() {
     try {
       var raw = localStorage.getItem(STORE_KEY);
-      if (raw) {
-        var p = JSON.parse(raw);
-        if (p && p.items) mem.items = p.items;
-        mem.notes = (p && p.notes && typeof p.notes === "object") ? p.notes : (mem.notes || {});
-      }
-    } catch (e) { /* file:// or private mode */ }
-    if (!mem.items) mem.items = {};
-    if (!mem.notes) mem.notes = {};
+      if (raw) mem = Study.normalizeMem(JSON.parse(raw));
+      else mem = Study.emptyMem();
+    } catch (e) {
+      mem = Study.emptyMem();
+    }
+    if (migrateExisting()) save();
     return mem;
   }
   function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(mem)); } catch (e) {} }
   function isDone(key) { return !!mem.items[key]; }
   function doneAt(key) { return mem.items[key] || null; }
-  function setDone(key, v) { if (v) mem.items[key] = new Date().toISOString(); else delete mem.items[key]; save(); }
+  function setDone(key, v) {
+    if (v) {
+      var already = !!mem.items[key];
+      mem.items[key] = mem.items[key] || new Date().toISOString();
+      if (key.indexOf("chunk:") === 0 || key.indexOf("pattern:") === 0) {
+        Study.enroll(mem, key, { fromIso: mem.items[key] });
+      }
+      if (key.indexOf("article:") === 0) {
+        var art = ARTICLES.filter(function (a) { return a.id === key.slice(8); })[0];
+        if (art) {
+          Study.expressionKeys(art).forEach(function (ek) {
+            Study.enroll(mem, ek, { fromIso: mem.items[key] });
+          });
+        }
+      }
+      if (!already) {
+        var kind = (key.indexOf("chunk:") === 0 || key.indexOf("pattern:") === 0) ? "new" : null;
+        Study.markActivity(mem, kind);
+      }
+    } else {
+      delete mem.items[key];
+    }
+    save();
+  }
   function getNote(id) { return (mem.notes && mem.notes[id]) || ""; }
   function setNote(id, text) {
     if (!mem.notes) mem.notes = {};
@@ -102,12 +145,12 @@
   }
   function studyCard(c) {
     var h = '<div class="study"><div class="tag">' + (c.no === 1 ? "제목" : "문장 " + (c.no - 1)) + "</div>";
-    h += '<div class="blk l-ko"><div class="lbl">한국어 원문</div><div class="txt">' + esc(c.ko) + "</div></div>";
-    h += '<div class="blk l-ultra"><div class="lbl">ULTRA SHORT</div><div class="txt">' + esc(c.ultra) + "</div></div>";
-    h += '<div class="blk l-biz"><div class="lbl">비즈니스 간결 번역</div><div class="txt">' + esc(c.biz) + "</div></div>";
+    h += '<div class="blk l-ko"><div class="lbl">한국어 원문</div><div class="txt">' + enBlock(c.ko) + "</div></div>";
+    h += '<div class="blk l-ultra"><div class="lbl">ULTRA SHORT</div><div class="txt">' + enBlock(c.ultra) + "</div></div>";
+    h += '<div class="blk l-biz"><div class="lbl">비즈니스 간결 번역</div><div class="txt">' + enBlock(c.biz) + "</div></div>";
     h += '<div class="blk l-note"><div class="lbl">번역 설명</div><div class="txt">' + esc(c.note) + "</div></div>";
     if (c.alts && c.alts.length) {
-      h += '<div class="blk l-alt"><div class="lbl">대체 표현</div><div class="chips">' + c.alts.map(function (a) { return '<span class="chip">' + esc(a) + "</span>"; }).join("") + "</div></div>";
+      h += '<div class="blk l-alt"><div class="lbl">대체 표현</div><div class="chips">' + c.alts.map(function (a) { return '<span class="chip">' + enBlock(a) + "</span>"; }).join("") + "</div></div>";
     }
     return h + "</div>";
   }
@@ -121,6 +164,8 @@
     var nextChunk = CHUNKS.filter(function (t) { return !isDone("chunktype:" + t.id); })[0];
     var h = '<section class="hero"><h1>오늘도 한 걸음 👋</h1><p class="lead" style="margin:0">매일 뉴스 기사 한 편으로 비즈니스 영어 번역을 연습하고, 문법 구문과 표현 덩어리를 하나씩 정복해요.</p>' +
       '<div style="margin-top:18px">' + bar(s.overall.done, s.overall.total) + '<div class="small muted" style="margin-top:6px">전체 진도 ' + pct(s.overall.done, s.overall.total) + "% · " + s.overall.done + " / " + s.overall.total + " 항목</div></div></section>";
+
+    h += goalWidget();
 
     h += '<div class="section"><div class="section-title">📰 오늘의 학습 기사</div>';
     if (a) {
@@ -144,6 +189,7 @@
     h += '<a class="unit-card" href="#/articles"><div class="t">🗂 날짜별 기사 아카이브</div><div class="s">지금까지 쌓인 기사 ' + ARTICLES.length + "편을 최신순으로 볼 수 있어요.</div></a>";
     h += '<a class="unit-card" href="#/grammar"><div class="t">📚 문법 구문 전체</div><div class="s">접속사부터 비즈니스 연결표현까지 ' + GRAMMAR.length + "개 유닛</div></a>";
     h += '<a class="unit-card" href="#/chunks"><div class="t">🗣 표현 덩어리</div><div class="s">연어·이디엄·담화 표지어를 통째로 외우고 내 문장을 만들어 보세요.</div></a>';
+    h += '<a class="unit-card" href="#/review"><div class="t">🔁 오늘의 복습</div><div class="s">간격 반복, 떠올리기, 빈칸 채우기, 따라 말하기</div></a>';
     h += '<a class="unit-card" href="#/progress"><div class="t">✅ 진도 관리</div><div class="s">완료 기록 보기, 내보내기/가져오기, 초기화</div></a>';
     h += "</div></div>";
     return h;
@@ -170,7 +216,7 @@
     var h = '<div class="breadcrumb"><a href="#/articles">오늘의 학습 기사</a> › ' + esc(a.date) + "</div>";
     h += '<div class="row" style="justify-content:space-between;margin-bottom:10px"><select id="dateSelect" aria-label="날짜 선택">' +
       ARTICLES.map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === a.id ? " selected" : "") + ">" + esc(x.date) + " · " + esc(x.title.length > 28 ? x.title.slice(0, 28) + "…" : x.title) + "</option>"; }).join("") +
-      "</select>" + checkbox(key) + "</div>";
+      "</select>" + rateToggle() + checkbox(key) + "</div>";
 
     h += '<section class="card" id="sec-info"><div class="day-banner" style="border-top:none;padding-top:0"><span class="pill ' + (idx === 0 ? "green" : "") + '">' + (idx === 0 ? "오늘의 기사 · " : "") + esc(a.dateLabel) + '</span><h1 style="font-size:22px;margin-top:10px">' + esc(a.title) + "</h1></div>";
     h += '<dl class="props"><dt>제목</dt><dd>' + esc(a.title) + "</dd><dt>출처</dt><dd><a href=\"" + esc(a.url) + '" target="_blank" rel="noopener noreferrer">' + esc(a.outlet) + "</a></dd><dt>게시일</dt><dd>" + esc(a.published) + "</dd><dt>분야</dt><dd>" + esc(a.field) + "</dd>" +
@@ -181,9 +227,9 @@
     h += '<section class="section" id="sec-1"><div class="section-title">1. 제목 분석</div>' + colorKey() + studyCard(a.titleCard) + "</section>";
     h += '<section class="section" id="sec-2"><div class="section-title">2~9. 문장별 분석</div>' + colorKey() + a.cards.map(studyCard).join("") + "</section>";
     var tLabel = a.translationLabel || (/요약/.test((a.translation || [])[0] || "") ? "10. 전체 영어 번역본 (요약 번역)" : "10. 전체 영어 번역본");
-    h += '<section class="section" id="sec-10"><div class="section-title">' + esc(tLabel) + '</div><div class="card translation">' + (a.translation || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</div></section>";
+    h += '<section class="section" id="sec-10"><div class="section-title">' + esc(tLabel) + '</div><div class="card translation">' + (a.translation || []).map(function (p) { return "<p>" + enBlock(p) + "</p>"; }).join("") + "</div></section>";
     h += '<section class="section" id="sec-11"><div class="section-title">11. 핵심 표현 20개</div><div class="table-wrap"><table><thead><tr><th>번호</th><th>한국어</th><th>영어 표현</th><th>예문</th></tr></thead><tbody>' +
-      (a.expressions || []).map(function (r) { return '<tr><td class="no">' + esc(r[0]) + "</td><td>" + esc(r[1]) + '</td><td class="en">' + esc(r[2]) + '</td><td class="ex">' + esc(r[3]) + "</td></tr>"; }).join("") + "</tbody></table></div></section>";
+      (a.expressions || []).map(function (r) { return '<tr><td class="no">' + esc(r[0]) + "</td><td>" + esc(r[1]) + '</td><td class="en">' + enBlock(r[2]) + '</td><td class="ex">' + enBlock(r[3]) + "</td></tr>"; }).join("") + "</tbody></table></div></section>";
     h += '<section class="section" id="sec-src"><div class="section-title">원문 기사</div><a class="card today" href="' + esc(a.url) + '" target="_blank" rel="noopener noreferrer"><div class="small muted">' + esc(outletName(a)) + " · " + esc(a.date) + '</div><div class="t" style="font-size:17px">' + esc(a.title) + ' ↗</div></a></section>';
 
     h += '<div class="card row" style="justify-content:space-between;margin-top:26px"><div><b>이 기사를 다 공부했나요?</b><div class="small muted">체크하면 진도에 반영돼요.</div></div>' + checkbox(key) + "</div>";
@@ -220,10 +266,10 @@
     // explanation is trusted authored HTML (allows <b>, <i>)
     h += '<section class="card explain"><h3>📖 설명</h3>' + u.explanation.map(function (p) { return "<p>" + p + "</p>"; }).join("") + "</section>";
     h += '<section class="section"><div class="section-title">🧩 핵심 패턴</div>' + u.patterns.map(function (p) {
-      return '<div class="pattern"><div class="head"><div class="name">' + esc(p.name) + "</div>" + checkbox("pattern:" + p.id, "익혔어요", true) + '</div><div class="form">' + esc(p.form) + '</div><div class="desc">' + esc(p.desc) + '</div><div class="ex">→ ' + esc(p.example) + "</div></div>";
+      return '<div class="pattern"><div class="head"><div class="name">' + esc(p.name) + "</div>" + checkbox("pattern:" + p.id, "익혔어요", true) + '</div><div class="form">' + esc(p.form) + '</div><div class="desc">' + esc(p.desc) + '</div><div class="ex">→ ' + esc(p.example) + " " + speakBtn(p.example) + "</div></div>";
     }).join("") + "</section>";
     h += '<section class="section"><div class="section-title">💬 예문 (' + u.examples.length + ')</div><div class="card"><ol class="examples">' + u.examples.map(function (e) {
-      return '<li><div class="en">' + esc(e.en) + '</div><div class="ko">' + esc(e.ko) + "</div></li>";
+      return '<li><div class="en">' + esc(e.en) + " " + speakBtn(e.en) + '</div><div class="ko">' + esc(e.ko) + "</div></li>";
     }).join("") + "</ol></div></section>";
     h += '<section class="section"><div class="section-title">⚠️ 자주 하는 실수</div><div class="card">' + u.mistakes.map(function (m) {
       return '<div class="mistake"><div class="w">✗ ' + esc(m.wrong) + '</div><div class="r">✓ ' + esc(m.right) + '</div><div class="y">' + esc(m.why) + "</div></div>";
@@ -361,11 +407,12 @@
   function chunkCard(it, i, total) {
     var noteId = "chunk:" + it.id;
     var note = getNote(noteId);
-    return '<article class="chunk-card" id="chunk-' + esc(it.id) + '"><div class="head"><div><span class="pill" style="margin-bottom:8px">' + (i + 1) + " / " + total + '</span><h3 class="phrase"><span class="chunk-emoji" aria-hidden="true">' + esc(it.emoji || "") + "</span> " + esc(it.chunk) + "</h3></div>" +
+    return '<article class="chunk-card" id="chunk-' + esc(it.id) + '"><div class="head"><div><span class="pill" style="margin-bottom:8px">' + (i + 1) + " / " + total + '</span><h3 class="phrase"><span class="chunk-emoji" aria-hidden="true">' + esc(it.emoji || "") + "</span> " + esc(it.chunk) + " " + speakBtn(it.chunk, "표현 듣기") + "</h3></div>" +
       checkbox(noteId, "외웠어요", true) + "</div>" +
       '<div class="meaning chunk-meaning">' + esc(it.meaning) + "</div>" +
-      '<div class="ex"><div class="ex-en">' + esc(it.exampleEn) + '</div><div class="ex-ko chunk-ex-ko">' + esc(it.exampleKo) + "</div></div>" +
+      '<div class="ex"><div class="ex-en">' + esc(it.exampleEn) + " " + speakBtn(it.exampleEn, "예문 듣기") + '</div><div class="ex-ko chunk-ex-ko">' + esc(it.exampleKo) + "</div></div>" +
       relMap(it) +
+      articleHitsHtml(it.id) +
       '<label class="mynote-label" for="note-' + esc(it.id) + '">내 문장 만들기</label>' +
       '<textarea class="mynote" id="note-' + esc(it.id) + '" data-note="' + esc(noteId) + '" rows="2" placeholder="이 덩어리를 써서 내 상황의 영어 문장을 쓰고, 소리 내어 말해 보세요.">' + esc(note) + "</textarea></article>";
   }
@@ -430,7 +477,7 @@
     h += '<p class="lead" style="margin-top:10px">' + esc(t.summary) + "</p>";
     h += '<section class="card explain"><h3>📖 설명</h3>' + (t.explanation || []).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</section>";
     h += '<div class="row" style="justify-content:space-between;margin:18px 0 8px;align-items:center"><div><b>표현 ' + items.length + '개</b> <span class="small muted">묶음 ' + clusters.length + "개 · 외웠어요 " + done + " / " + items.length + "</span></div>" +
-      '<button type="button" class="btn" id="btnHideMeanings" aria-pressed="' + (hideMeanings ? "true" : "false") + '">' + (hideMeanings ? "뜻 보이기" : "뜻 가리기") + "</button></div>";
+      '<span class="row">' + rateToggle() + '<button type="button" class="btn" id="btnHideMeanings" aria-pressed="' + (hideMeanings ? "true" : "false") + '">' + (hideMeanings ? "뜻 보이기" : "뜻 가리기") + "</button></span></div>";
     h += '<div style="margin-bottom:16px">' + bar(done, items.length) + "</div>";
     if (clusters.length) {
       h += '<div class="jump" aria-label="묶음 이동">' + clusters.map(function (c) {
@@ -474,7 +521,9 @@
 
   function viewProgress() {
     var s = stats();
-    var h = '<h1>진도 관리</h1><p class="lead">체크한 기록과 ‘내 문장 만들기’ 메모는 이 브라우저에 저장돼요. 다른 기기로 옮기려면 내보낸 JSON 파일을 그 기기에서 가져오세요.</p>';
+    var h = '<h1>진도 관리</h1><p class="lead">체크한 기록과 ‘내 문장 만들기’ 메모와 복습 간격은 이 브라우저에 저장돼요. 다른 기기로 옮기려면 내보낸 JSON 파일을 그 기기에서 가져오세요.</p>';
+    h += '<div class="card" style="margin-bottom:18px"><div class="row" style="justify-content:space-between"><div><b>연속 학습 ' + Study.streak(mem) + "일</b><div class=\"small muted\">복습 기한 " + Study.dueKeys(mem).length + "개 · 오답 " + Object.keys(mem.misses || {}).length + "개</div></div><a class=\"btn\" href=\"#/review\">오늘의 복습</a></div>";
+    h += '<div class="small muted" style="margin:12px 0 6px">최근 30일</div>' + calendarHtml(30) + "</div>";
     h += '<div class="grid-3">' + statBox("전체", s.overall) + statBox("학습 기사", s.articles) + statBox("문법 유닛", s.units) + statBox("세부 패턴", s.patterns) + statBox("표현 유형", s.chunkTypes) + statBox("표현 덩어리", s.chunks) + "</div>";
     h += '<div class="card row" style="margin-top:18px"><button class="btn primary" id="btnExport">⬇ 진도 내보내기 (JSON)</button><label class="btn" for="fileImport">⬆ 진도 가져오기</label><input type="file" id="fileImport" accept="application/json,.json" hidden><button class="btn danger" id="btnReset" style="margin-left:auto">초기화</button></div>';
     h += '<div class="section"><div class="section-title">📰 기사</div><div class="table-wrap"><table><thead><tr><th>날짜</th><th>제목</th><th>완료일</th></tr></thead><tbody>' +
@@ -486,6 +535,372 @@
     return h;
   }
 
+  function speakBtn(text, label) {
+    text = String(text || "").trim();
+    if (!text) return "";
+    return '<button type="button" class="speak-btn" data-speak="' + esc(text) + '" title="듣기" aria-label="' + esc(label || "영어 듣기") + '">🔊</button>';
+  }
+  function rateToggle() {
+    var r = Study.defaultSettings(mem).speechRate;
+    return '<span class="rate-toggle" role="group" aria-label="말하기 속도">' +
+      '<span class="small muted">속도</span>' +
+      '<button type="button" class="btn sm' + (r === 0.8 ? " primary" : "") + '" data-rate="0.8">0.8×</button>' +
+      '<button type="button" class="btn sm' + (r === 1 ? " primary" : "") + '" data-rate="1">1×</button></span>';
+  }
+  function enHtml(text) {
+    text = String(text || "");
+    if (!text) return "";
+    var hit = Study.looksEnglish(text) ? Study.highlight(text, getCorpus().patterns, function (typeId, id) { return chunkHref(typeId, id); }) : null;
+    return hit ? hit.html : esc(text);
+  }
+  function enBlock(text) {
+    if (!text) return esc(text);
+    return enHtml(text) + (Study.looksEnglish(text) ? " " + speakBtn(text) : "");
+  }
+  function calendarHtml(days) {
+    var cells = Study.calendar(mem, days || 30);
+    var today = Study.todayStr();
+    return '<div class="cal" aria-label="최근 30일 학습">' + cells.map(function (c) {
+      var on = c.n > 0, isToday = c.day === today;
+      var title = c.day + (c.n ? " · " + c.n + "회 학습" : " · 기록 없음");
+      return '<span class="cal-d' + (on ? " on" : "") + (isToday ? " is-today" : "") + '" title="' + esc(title) + '"></span>';
+    }).join("") + "</div>";
+  }
+  function articleHitsHtml(chunkId) {
+    var hits = (getCorpus().byChunk[chunkId] || []).slice();
+    if (!hits.length) return "";
+    var seen = {}, uniq = [];
+    hits.forEach(function (h) {
+      var k = h.articleId + "::" + h.sentence;
+      if (seen[k]) return;
+      seen[k] = 1;
+      uniq.push(h);
+    });
+    return '<div class="article-hits"><div class="mynote-label">기사에서 만난 문장</div>' + uniq.map(function (h) {
+      var href = "#/articles/" + encodeURIComponent(h.articleId);
+      return '<a class="hit-row" href="' + esc(href) + '"><span class="small muted">' + esc(h.date) + " · " + esc(h.fieldLabel) + '</span><div class="hit-en">' + enHtml(h.sentence) + "</div></a>";
+    }).join("") + "</div>";
+  }
+  function goalWidget() {
+    var s = Study.defaultSettings(mem);
+    var act = Study.todayActivity(mem);
+    var due = Study.dueKeys(mem).length;
+    var st = Study.streak(mem);
+    var misses = Object.keys(mem.misses || {}).length;
+    var h = '<section class="card review-widget" id="today-review">';
+    h += '<div class="row" style="justify-content:space-between;align-items:flex-start"><div><div class="section-title" style="border:0;padding:0;margin:0 0 6px">🔁 오늘의 복습</div>';
+    h += '<p class="lead" style="margin:0">복습할 표현 <b>' + due + "개</b> · 연속 학습 <b>" + st + "일</b>" + (misses ? " · 오답 " + misses + "개" : "") + "</p></div>";
+    h += '<a class="btn primary" href="#/review">복습하러 가기</a></div>';
+    h += '<div class="goal-grid">';
+    h += '<div><div class="small muted">새 표현 ' + act.news + " / " + s.newGoal + "</div>" + bar(Math.min(act.news, s.newGoal), s.newGoal) + "</div>";
+    h += '<div><div class="small muted">복습 ' + act.reviews + " / " + s.reviewGoal + "</div>" + bar(Math.min(act.reviews, s.reviewGoal), s.reviewGoal) + "</div>";
+    h += "</div>";
+    h += '<div class="small muted" style="margin:12px 0 6px">최근 30일</div>' + calendarHtml(30);
+    h += "</section>";
+    return h;
+  }
+  function describe(key) { return Study.describeKey(key, CHUNKS, GRAMMAR, ARTICLES); }
+  function buildQueue(mode) {
+    var due = Study.dueKeys(mem).filter(describe);
+    var s = Study.defaultSettings(mem);
+    var news = [];
+    if (mode !== "review-only") {
+      CHUNKS.forEach(function (t) {
+        (t.items || []).forEach(function (it) {
+          var k = "chunk:" + it.id;
+          if (!mem.srs[k] && news.length < s.newGoal) news.push(k);
+        });
+      });
+    }
+    if (mode === "cloze" || mode === "shadow") {
+      due = due.filter(function (k) { var d = describe(k); return d && d.exampleEn; });
+      news = news.filter(function (k) { var d = describe(k); return d && d.exampleEn; });
+    }
+    return due.concat(news);
+  }
+
+  var quiz = { mode: null, queue: [], index: 0, revealed: false, lastMatch: null, typed: "" };
+  var shadow = { running: false, paused: false, index: 0, queue: [], timer: null, recUrl: null, media: null };
+
+  function stopShadow() {
+    shadow.paused = true;
+    shadow.running = false;
+    if (shadow.timer) { clearTimeout(shadow.timer); shadow.timer = null; }
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+    try { if (shadow.media && shadow.media.state === "recording") shadow.media.stop(); } catch (e2) {}
+  }
+
+  function viewReview() {
+    var s = Study.defaultSettings(mem);
+    var act = Study.todayActivity(mem);
+    var due = Study.dueKeys(mem);
+    var st = Study.streak(mem);
+    var missN = Object.keys(mem.misses || {}).length;
+    var h = '<h1>오늘의 복습</h1><p class="lead">외운 표현을 1·3·7·21·60일 간격으로 다시 만납니다. 떠올리기나 빈칸 채우기로 스스로 채점하면, 쉬움은 간격이 길어지고 어려움은 내일 다시 나와요.</p>';
+    h += '<div class="grid-3">' +
+      '<div class="card stat"><div class="label">오늘 남은 복습</div><div class="num">' + due.length + '</div><div class="small muted">기한이 된 표현</div></div>' +
+      '<div class="card stat"><div class="label">연속 학습일</div><div class="num">' + st + '</div><div class="small muted">하루라도 공부하면 이어집니다</div></div>' +
+      '<div class="card stat"><div class="label">오답 노트</div><div class="num">' + missN + '</div><div class="small muted"><a href="#/review/misses">집중 다시 풀기</a></div></div></div>';
+    h += '<div class="card" style="margin-top:16px"><div class="row" style="justify-content:space-between"><b>오늘 목표</b>' + rateToggle() + "</div>";
+    h += '<div class="goal-grid" style="margin-top:12px">';
+    h += '<label>새 표현 <input id="newGoal" class="goal-input" type="number" min="1" max="30" value="' + s.newGoal + '"> <span class="small muted">' + act.news + " / " + s.newGoal + " 완료</span></label>";
+    h += '<label>복습 <input id="reviewGoal" class="goal-input" type="number" min="1" max="50" value="' + s.reviewGoal + '"> <span class="small muted">' + act.reviews + " / " + s.reviewGoal + " 완료</span></label>";
+    h += "</div>" + '<div style="margin-top:10px">' + bar(Math.min(act.news, s.newGoal), s.newGoal) + '<div style="height:8px"></div>' + bar(Math.min(act.reviews, s.reviewGoal), s.reviewGoal) + "</div></div>";
+    h += '<div class="small muted" style="margin:16px 0 6px">최근 30일 학습</div>' + calendarHtml(30);
+    h += '<div class="grid" style="margin-top:22px">';
+    h += '<a class="unit-card" href="#/review/recall"><div class="t">🧠 떠올리기</div><div class="s">한국어 뜻을 보고 영어 덩어리를 떠올리거나 적어 보세요. 쉬움·보통·어려움으로 다음 복습일이 달라집니다.</div></a>';
+    h += '<a class="unit-card" href="#/review/cloze"><div class="t">✏️ 빈칸 채우기</div><div class="s">예문에서 덩어리가 빠진 자리를 채워 보세요. 채점은 같은 간격 반복에 반영됩니다.</div></a>';
+    h += '<a class="unit-card" href="#/review/shadow"><div class="t">🎧 듣고 따라 말하기</div><div class="s">원어 발음을 듣고, 따라 말할 시간을 가진 뒤 다음 문장으로 넘어갑니다.</div></a>';
+    h += '<a class="unit-card" href="#/review/misses"><div class="t">📝 오답 노트</div><div class="s">어려웠거나 틀린 표현만 모아 다시 풀어 보세요.</div></a>';
+    h += "</div>";
+    if (due.length) {
+      h += '<div class="section"><div class="section-title">오늘 기한이 된 표현</div><div class="table-wrap"><table><thead><tr><th>표현</th><th>뜻</th><th>기한</th></tr></thead><tbody>';
+      h += due.slice(0, 20).map(function (k) {
+        var d = describe(k), card = mem.srs[k];
+        if (!d) return "";
+        return '<tr><td><a href="' + esc(d.href) + '">' + esc(d.title) + "</a></td><td>" + esc(d.promptKo) + "</td><td>" + esc(card.due) + "</td></tr>";
+      }).join("") + "</tbody></table></div>" + (due.length > 20 ? '<p class="small muted">외 ' + (due.length - 20) + "개</p>" : "") + "</div>";
+    }
+    return h;
+  }
+
+  function ensureQuiz(mode) {
+    if (quiz.mode !== mode || !quiz.queue.length) {
+      quiz.mode = mode;
+      quiz.queue = mode === "misses" ? Object.keys(mem.misses || {}).filter(describe) : buildQueue(mode);
+      quiz.index = 0;
+      quiz.revealed = false;
+      quiz.lastMatch = null;
+      quiz.typed = "";
+    }
+    if (quiz.index >= quiz.queue.length) quiz.index = quiz.queue.length;
+  }
+  function quizProgress() {
+    return '<div class="small muted">문항 ' + Math.min(quiz.index + 1, quiz.queue.length) + " / " + quiz.queue.length + "</div>";
+  }
+  function gradeButtons() {
+    return '<div class="row grade-row"><button type="button" class="btn danger" data-grade="hard">어려움</button><button type="button" class="btn" data-grade="good">보통</button><button type="button" class="btn primary" data-grade="easy">쉬움</button></div><p class="small muted">어려움은 내일 다시, 보통은 다음 간격, 쉬움은 간격을 더 늘립니다.</p>';
+  }
+  function viewRecall() {
+    ensureQuiz("recall");
+    if (!quiz.queue.length) return '<h1>떠올리기</h1><p class="lead">지금은 복습하거나 새로 외울 표현이 없어요. 표현 덩어리에서 ‘외웠어요’를 체크하거나, 나중에 다시 와 주세요.</p><p><a class="btn" href="#/review">복습 홈</a></p>';
+    if (quiz.index >= quiz.queue.length) {
+      return '<h1>떠올리기</h1><div class="card"><p>오늘의 카드를 모두 봤어요. 잘했어요!</p><p><a class="btn primary" href="#/review">복습 홈</a></p></div>';
+    }
+    var d = describe(quiz.queue[quiz.index]);
+    var h = '<div class="breadcrumb"><a href="#/review">오늘의 복습</a> › 떠올리기</div>';
+    h += '<div class="row" style="justify-content:space-between"><h1 style="margin:0">떠올리기</h1>' + rateToggle() + "</div>" + quizProgress();
+    h += '<section class="card quiz-card"><div class="quiz-emoji">' + esc(d.emoji || "🗣") + '</div>';
+    h += '<p class="quiz-prompt">' + esc(d.promptKo) + "</p>";
+    h += '<p class="small muted">' + esc(d.typeTitle || "") + (d.kind === "pattern" ? " · 문법 패턴" : d.kind === "expr" ? " · 기사 핵심 표현" : "") + "</p>";
+    if (!quiz.revealed) {
+      h += '<label class="mynote-label" for="recallInput">영어로 적어 보세요 (말해 보고 정답 보기만 해도 됩니다)</label>';
+      h += '<input id="recallInput" class="mynote quiz-input" type="text" autocomplete="off" value="' + esc(quiz.typed) + '" placeholder="영어 표현">';
+      h += '<div class="row" style="margin-top:12px"><button type="button" class="btn primary" id="btnCheckAnswer">확인</button><button type="button" class="btn" id="btnReveal">정답 보기</button></div>';
+    } else {
+      var fb = quiz.lastMatch;
+      if (fb && fb.closeness === "exact") h += '<div class="fb ok">정답입니다. 정확히 맞았어요.</div>';
+      else if (fb && fb.ok) h += '<div class="fb close">거의 맞았어요. 정답은 <b>' + esc(d.answer) + "</b> 입니다.</div>";
+      else if (fb && fb.closeness === "empty") h += '<div class="fb muted">스스로 채점해 보세요. 정답은 <b>' + esc(d.answer) + "</b> 입니다.</div>";
+      else if (fb) h += '<div class="fb no">아쉬워요. 정답은 <b>' + esc(d.answer) + "</b> 입니다.</div>";
+      else h += '<div class="fb muted">정답은 <b>' + esc(d.answer) + "</b> 입니다.</div>";
+      h += '<div class="ex" style="margin-top:12px"><div class="ex-en">' + esc(d.exampleEn || d.answer) + " " + speakBtn(d.exampleEn || d.answer) + '</div>' + (d.exampleKo ? '<div class="ex-ko">' + esc(d.exampleKo) + "</div>" : "") + "</div>";
+      h += '<p><a href="' + esc(d.href) + '">표현 카드로 가기 →</a></p>';
+      h += gradeButtons();
+    }
+    return h + "</section>";
+  }
+  function viewCloze() {
+    ensureQuiz("cloze");
+    if (!quiz.queue.length) return '<h1>빈칸 채우기</h1><p class="lead">예문이 있는 복습 카드가 지금은 없어요.</p><p><a class="btn" href="#/review">복습 홈</a></p>';
+    if (quiz.index >= quiz.queue.length) {
+      return '<h1>빈칸 채우기</h1><div class="card"><p>오늘의 빈칸을 모두 채웠어요.</p><p><a class="btn primary" href="#/review">복습 홈</a></p></div>';
+    }
+    var d = describe(quiz.queue[quiz.index]);
+    var cz = Study.clozeOf(d.exampleEn, d.answer);
+    var h = '<div class="breadcrumb"><a href="#/review">오늘의 복습</a> › 빈칸 채우기</div>';
+    h += '<div class="row" style="justify-content:space-between"><h1 style="margin:0">빈칸 채우기</h1>' + rateToggle() + "</div>" + quizProgress();
+    h += '<section class="card quiz-card">';
+    h += '<p class="cloze-sent"><span class="en">' + esc(cz.before) + '</span><span class="cloze-blank">______</span><span class="en">' + esc(cz.after) + "</span> " + speakBtn(d.exampleEn) + "</p>";
+    if (d.exampleKo) h += '<p class="ex-ko">' + esc(d.exampleKo) + "</p>";
+    if (!quiz.revealed) {
+      h += '<label class="mynote-label" for="recallInput">빈칸에 들어갈 영어 표현</label>';
+      h += '<input id="recallInput" class="mynote quiz-input" type="text" autocomplete="off" value="' + esc(quiz.typed) + '">';
+      h += '<div class="row" style="margin-top:12px"><button type="button" class="btn primary" id="btnCheckAnswer">확인</button></div>';
+    } else {
+      var fb = quiz.lastMatch;
+      if (fb && fb.ok) h += '<div class="fb ok">' + (fb.closeness === "exact" ? "정답입니다." : "거의 맞았어요.") + " <b>" + esc(cz.answer || d.answer) + "</b></div>";
+      else h += '<div class="fb no">정답은 <b>' + esc(cz.answer || d.answer) + "</b> 입니다.</div>";
+      h += '<p class="ex-en">' + esc(d.exampleEn) + "</p>";
+      h += gradeButtons();
+    }
+    return h + "</section>";
+  }
+  function viewMisses() {
+    var keys = Object.keys(mem.misses || {}).filter(describe);
+    var h = '<div class="breadcrumb"><a href="#/review">오늘의 복습</a> › 오답 노트</div><h1>오답 노트</h1>';
+    h += '<p class="lead">어려움으로 표시했거나, 떠올리기·빈칸에서 틀린 표현입니다. 여기서 다시 풀면 간격 반복에도 반영돼요.</p>';
+    if (!keys.length) return h + '<div class="card">지금은 오답이 없어요. 복습할 때 틀린 표현이 여기 모입니다.</div>';
+    h += '<p><a class="btn primary" href="#/review/recall" id="btnRetryMisses">오답으로 떠올리기</a></p>';
+    h += '<div class="table-wrap"><table><thead><tr><th>표현</th><th>뜻</th><th>횟수</th><th>최근</th></tr></thead><tbody>';
+    h += keys.map(function (k) {
+      var d = describe(k), m = mem.misses[k];
+      return '<tr><td><a href="' + esc(d.href) + '">' + esc(d.title) + "</a></td><td>" + esc(d.promptKo) + "</td><td>" + (m.count || 1) + "</td><td>" + esc(fmtDate(m.last)) + "</td></tr>";
+    }).join("") + "</tbody></table></div>";
+    return h;
+  }
+  function viewShadow() {
+    var supported = Study.speechSupported(window.speechSynthesis);
+    var mic = Study.micSupported();
+    if (!shadow.queue.length) shadow.queue = buildQueue("shadow");
+    var h = '<div class="breadcrumb"><a href="#/review">오늘의 복습</a> › 듣고 따라 말하기</div>';
+    h += '<div class="row" style="justify-content:space-between"><h1 style="margin:0">듣고 따라 말하기</h1>' + rateToggle() + "</div>";
+    h += '<p class="lead">영어 문장을 듣고, 잠시 멈추는 동안 따라 말한 뒤 다음 문장으로 넘어갑니다.' + (supported ? "" : " 이 브라우저는 음성 읽기를 지원하지 않아, 문장을 보고 스스로 읽어 보세요.") + "</p>";
+    if (!shadow.queue.length) return h + '<div class="card">따라 말할 예문이 있는 카드가 지금은 없어요.</div>';
+    var i = Math.min(shadow.index, shadow.queue.length - 1);
+    var d = describe(shadow.queue[i]);
+    h += '<section class="card quiz-card" id="shadowPanel">';
+    h += '<div class="small muted">문장 ' + (i + 1) + " / " + shadow.queue.length + "</div>";
+    h += '<p class="quiz-prompt">' + esc(d.emoji || "") + " " + esc(d.title) + " " + speakBtn(d.exampleEn || d.answer) + "</p>";
+    h += '<p class="ex-en" id="shadowText">' + esc(d.exampleEn || d.answer) + "</p>";
+    if (d.exampleKo) h += '<p class="ex-ko">' + esc(d.exampleKo) + "</p>";
+    h += '<p class="small" id="shadowStatus">' + (shadow.running && !shadow.paused ? "재생 중이거나, 따라 말할 시간입니다." : "시작을 누르면 한 문장씩 재생됩니다.") + "</p>";
+    h += '<div class="row">';
+    h += '<button type="button" class="btn primary" id="btnShadowStart">' + (shadow.running && !shadow.paused ? "일시정지" : "시작") + "</button>";
+    h += '<button type="button" class="btn" id="btnShadowNext">다음</button>';
+    h += '<button type="button" class="btn" id="btnShadowStop">그만두기</button>';
+    h += "</div>";
+    if (mic) {
+      h += '<div class="row" style="margin-top:12px"><button type="button" class="btn" id="btnShadowRec">내 목소리 녹음</button><button type="button" class="btn" id="btnShadowStopRec">녹음 종료</button></div>';
+      h += '<audio id="shadowPlayback" controls style="margin-top:10px;width:100%"' + (shadow.recUrl ? ' src="' + esc(shadow.recUrl) + '"' : " hidden") + "></audio>";
+    } else {
+      h += '<p class="small muted">이 브라우저는 마이크 녹음을 지원하지 않아요. 듣기와 따라 말하기는 그대로 사용할 수 있습니다.</p>';
+    }
+    return h + "</section>";
+  }
+
+  function currentQuizItem() {
+    var key = quiz.queue[quiz.index];
+    return key ? describe(key) : null;
+  }
+  function revealQuiz(fromCheck) {
+    var inp = document.getElementById("recallInput");
+    if (inp) quiz.typed = inp.value;
+    var d = currentQuizItem();
+    if (!d) return;
+    var expected = d.answer;
+    if (quiz.mode === "cloze") {
+      var cz = Study.clozeOf(d.exampleEn, d.answer);
+      expected = cz.answer || d.answer;
+    }
+    quiz.lastMatch = Study.matchAnswer(quiz.typed, expected);
+    if (fromCheck && !quiz.lastMatch.ok && String(quiz.typed || "").trim()) {
+      Study.noteWrong(mem, d.key, quiz.typed);
+    }
+    quiz.revealed = true;
+    save();
+    rerender();
+  }
+  function applyGrade(quality) {
+    var key = quiz.queue[quiz.index];
+    if (!key) return;
+    Study.grade(mem, key, quality);
+    if (!mem.items[key] && (key.indexOf("chunk:") === 0 || key.indexOf("pattern:") === 0 || key.indexOf("expr:") === 0)) {
+      mem.items[key] = new Date().toISOString();
+    }
+    save();
+    quiz.index += 1;
+    quiz.revealed = false;
+    quiz.lastMatch = null;
+    quiz.typed = "";
+    rerender();
+  }
+  function refreshShadowPanel() {
+    route._keepScroll = true;
+    route();
+  }
+  function advanceShadow() {
+    if (shadow.index >= shadow.queue.length - 1) {
+      shadow.running = false;
+      shadow.paused = true;
+      refreshShadowPanel();
+      var done = document.getElementById("shadowStatus");
+      if (done) done.textContent = "오늘의 따라 말하기를 마쳤어요.";
+      return;
+    }
+    shadow.index += 1;
+    refreshShadowPanel();
+    if (shadow.running && !shadow.paused) runShadowStep();
+  }
+  function runShadowStep() {
+    if (!shadow.running || shadow.paused) return;
+    var d = describe(shadow.queue[shadow.index]);
+    if (!d) { advanceShadow(); return; }
+    var text = d.exampleEn || d.answer || "";
+    var rate = Study.defaultSettings(mem).speechRate;
+    var times = Study.shadowPauseMs(text, rate);
+    shadow.gen = (shadow.gen || 0) + 1;
+    var gen = shadow.gen;
+    var status = document.getElementById("shadowStatus");
+    if (status) status.textContent = "듣고 있어요…";
+    var spoken = Study.speakText(window.speechSynthesis, text, rate, function () {
+      if (shadow.gen !== gen || shadow.paused) return;
+      if (status) status.textContent = "따라 말하세요";
+      shadow.timer = setTimeout(function () {
+        if (shadow.gen !== gen || shadow.paused) return;
+        advanceShadow();
+      }, times.repeatMs);
+    });
+    if (!spoken) {
+      if (status) status.textContent = "문장을 읽고 따라 말하세요";
+      shadow.timer = setTimeout(function () {
+        if (shadow.gen !== gen || shadow.paused) return;
+        advanceShadow();
+      }, times.speakMs + times.repeatMs);
+    }
+  }
+  function toggleShadow() {
+    if (shadow.running && !shadow.paused) {
+      shadow.paused = true;
+      shadow.gen = (shadow.gen || 0) + 1;
+      if (shadow.timer) { clearTimeout(shadow.timer); shadow.timer = null; }
+      try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+      var st = document.getElementById("shadowStatus");
+      var btn = document.getElementById("btnShadowStart");
+      if (st) st.textContent = "일시정지했어요.";
+      if (btn) btn.textContent = "계속";
+      return;
+    }
+    if (!shadow.queue.length) shadow.queue = buildQueue("shadow");
+    shadow.running = true;
+    shadow.paused = false;
+    var btn2 = document.getElementById("btnShadowStart");
+    if (btn2) btn2.textContent = "일시정지";
+    runShadowStep();
+  }
+  function startMic() {
+    if (!Study.micSupported()) { toast("이 브라우저에서는 녹음을 지원하지 않아요."); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      var recChunks = [];
+      var media = new MediaRecorder(stream);
+      shadow.media = media;
+      media.ondataavailable = function (ev) { if (ev.data && ev.data.size) recChunks.push(ev.data); };
+      media.onstop = function () {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        if (shadow.recUrl) URL.revokeObjectURL(shadow.recUrl);
+        var blob = new Blob(recChunks, { type: media.mimeType || "audio/webm" });
+        shadow.recUrl = URL.createObjectURL(blob);
+        var a = document.getElementById("shadowPlayback");
+        if (a) { a.src = shadow.recUrl; a.hidden = false; }
+      };
+      media.start();
+      toast("녹음을 시작했어요");
+    }).catch(function () { toast("마이크 권한을 허용해 주세요."); });
+  }
+  function stopMic() {
+    try { if (shadow.media && shadow.media.state === "recording") shadow.media.stop(); } catch (e) {}
+  }
+
   function notFound() { return '<div class="card"><h2>페이지를 찾을 수 없어요</h2><p><a href="#/">홈으로</a></p></div>'; }
 
   /* ---------- router ---------- */
@@ -493,16 +908,33 @@
     var hash = location.hash.replace(/^#\/?/, "");
     var parts = hash.split("/").filter(Boolean);
     var section = parts[0] || "home", html;
+    if (section !== "review" || parts[1] !== "shadow") stopShadow();
     if (section === "home") html = viewHome();
     else if (section === "articles") html = parts[1] ? viewArticle(decodeURIComponent(parts[1])) : viewArticles();
     else if (section === "grammar") html = parts[1] ? viewUnit(decodeURIComponent(parts[1])) : viewGrammar();
     else if (section === "chunks") html = parts[1] ? viewChunkType(decodeURIComponent(parts[1])) : viewChunks();
+    else if (section === "review") {
+      if (parts[1] === "recall") html = viewRecall();
+      else if (parts[1] === "cloze") html = viewCloze();
+      else if (parts[1] === "shadow") html = viewShadow();
+      else if (parts[1] === "misses") html = viewMisses();
+      else html = viewReview();
+    }
     else if (section === "progress") html = viewProgress();
     else html = notFound();
     app.innerHTML = html;
     document.querySelectorAll("[data-nav]").forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-nav") === section); });
-    var titles = { home: "홈", articles: "오늘의 학습 기사", grammar: "문법 구문", chunks: "표현 덩어리", progress: "진도" };
+    var titles = { home: "홈", articles: "오늘의 학습 기사", grammar: "문법 구문", chunks: "표현 덩어리", review: "오늘의 복습", progress: "진도" };
     var pageTitle = titles[section] || "영어 공부방";
+    if (section === "review") {
+      var sub = { recall: "떠올리기", cloze: "빈칸 채우기", shadow: "듣고 따라 말하기", misses: "오답 노트" };
+      if (parts[1] && sub[parts[1]]) pageTitle = sub[parts[1]];
+    }
+    var navRev = document.querySelector('[data-nav="review"]');
+    if (navRev) {
+      var dueN = Study.dueKeys(mem).length;
+      navRev.innerHTML = "오늘의 복습" + (dueN ? ' <span class="nav-badge">' + dueN + "</span>" : "");
+    }
     if (section === "chunks" && parts[1]) {
       var tObj = CHUNKS.filter(function (t) { return t.id === decodeURIComponent(parts[1]); })[0];
       if (tObj) pageTitle = tObj.title;
@@ -524,6 +956,7 @@
   app.addEventListener("input", function (e) {
     var t = e.target;
     if (t.matches("textarea[data-note]")) setNote(t.getAttribute("data-note"), t.value);
+    if (t.id === "recallInput") quiz.typed = t.value;
   });
   app.addEventListener("change", function (e) {
     var t = e.target;
@@ -534,6 +967,12 @@
       rerender();
     } else if (t.id === "dateSelect") {
       location.hash = "#/articles/" + t.value;
+    } else if (t.id === "newGoal" || t.id === "reviewGoal") {
+      var n = Number(t.value);
+      mem.settings = Study.defaultSettings(mem);
+      if (t.id === "newGoal" && n >= 1 && n <= 30) mem.settings.newGoal = Math.round(n);
+      if (t.id === "reviewGoal" && n >= 1 && n <= 50) mem.settings.reviewGoal = Math.round(n);
+      save();
     } else if (t.id === "fileImport" && t.files && t.files[0]) {
       var reader = new FileReader();
       reader.onload = function () {
@@ -541,19 +980,78 @@
           var data = JSON.parse(reader.result);
           if (!data || typeof data.items !== "object") throw new Error("형식 오류");
           var merge = confirm("기존 진도와 합칠까요?\n[확인] 합치기  ·  [취소] 가져온 내용으로 덮어쓰기");
-          var incomingNotes = (data.notes && typeof data.notes === "object") ? data.notes : {};
+          var imported = Study.migrateExport(data);
           if (merge) {
-            mem = { items: Object.assign({}, mem.items, data.items), notes: Object.assign({}, mem.notes, incomingNotes) };
+            mem.items = Object.assign({}, mem.items, imported.items);
+            mem.notes = Object.assign({}, mem.notes, imported.notes);
+            mem.srs = Object.assign({}, mem.srs, imported.srs);
+            mem.activity = Object.assign({}, mem.activity, imported.activity);
+            mem.misses = Object.assign({}, mem.misses, imported.misses);
+            mem.settings = Object.assign({}, Study.defaultSettings(mem), imported.settings);
           } else {
-            mem = { items: data.items, notes: incomingNotes };
+            mem = imported;
           }
+          migrateExisting();
           save(); toast("진도를 가져왔어요"); rerender();
         } catch (err) { alert("가져오기 실패: 올바른 진도 JSON 파일이 아니에요."); }
       };
       reader.readAsText(t.files[0]);
     }
   });
+  app.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target && e.target.id === "recallInput") {
+      e.preventDefault();
+      var chk = document.getElementById("btnCheckAnswer");
+      if (chk) chk.click();
+    }
+  });
   app.addEventListener("click", function (e) {
+    var sp = e.target.closest("[data-speak]");
+    if (sp) {
+      e.preventDefault();
+      var ok = Study.speakText(window.speechSynthesis, sp.getAttribute("data-speak"), Study.defaultSettings(mem).speechRate, null);
+      if (!ok) toast("이 브라우저에서는 음성 읽기를 지원하지 않아요.");
+      return;
+    }
+    var rateBtn = e.target.closest("[data-rate]");
+    if (rateBtn) {
+      e.preventDefault();
+      mem.settings = Study.defaultSettings(mem);
+      mem.settings.speechRate = Number(rateBtn.getAttribute("data-rate")) === 0.8 ? 0.8 : 1;
+      save();
+      if (shadow.running && !shadow.paused) {
+        document.querySelectorAll("[data-rate]").forEach(function (b) {
+          b.classList.toggle("primary", b.getAttribute("data-rate") === String(mem.settings.speechRate));
+        });
+      } else {
+        rerender();
+      }
+      return;
+    }
+    if (e.target.id === "btnCheckAnswer") { revealQuiz(true); return; }
+    if (e.target.id === "btnReveal") { revealQuiz(false); return; }
+    var g = e.target.closest("[data-grade]");
+    if (g) { applyGrade(g.getAttribute("data-grade")); return; }
+    if (e.target.closest("#btnRetryMisses")) {
+      quiz.mode = "misses";
+      quiz.queue = Object.keys(mem.misses || {}).filter(describe);
+      quiz.index = 0;
+      quiz.revealed = false;
+      quiz.lastMatch = null;
+      quiz.typed = "";
+      return;
+    }
+    if (e.target.id === "btnShadowStart") { toggleShadow(); return; }
+    if (e.target.id === "btnShadowNext") {
+      shadow.gen = (shadow.gen || 0) + 1;
+      if (shadow.timer) { clearTimeout(shadow.timer); shadow.timer = null; }
+      try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (err) {}
+      advanceShadow();
+      return;
+    }
+    if (e.target.id === "btnShadowStop") { stopShadow(); shadow.index = 0; rerender(); return; }
+    if (e.target.id === "btnShadowRec") { startMic(); return; }
+    if (e.target.id === "btnShadowStopRec") { stopMic(); return; }
     var hideBtn = e.target.closest("#btnHideMeanings");
     if (hideBtn) {
       hideMeanings = !hideMeanings;
@@ -568,7 +1066,17 @@
     if (j) { var el = document.getElementById(j.getAttribute("data-jump")); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
     if (e.target.id === "btnExport") {
       flushNotes();
-      var payload = JSON.stringify({ app: "english-study-site", version: 2, exportedAt: new Date().toISOString(), items: mem.items, notes: mem.notes || {} }, null, 2);
+      var payload = JSON.stringify({
+        app: "english-study-site",
+        version: 3,
+        exportedAt: new Date().toISOString(),
+        items: mem.items,
+        notes: mem.notes || {},
+        srs: mem.srs || {},
+        settings: Study.defaultSettings(mem),
+        activity: mem.activity || {},
+        misses: mem.misses || {}
+      }, null, 2);
       var blob = new Blob([payload], { type: "application/json" });
       var url = URL.createObjectURL(blob), a = document.createElement("a");
       a.href = url; a.download = "english-study-progress-" + new Date().toISOString().slice(0, 10) + ".json";
@@ -576,10 +1084,24 @@
       toast("진도 파일을 내려받았어요");
     }
     if (e.target.id === "btnReset") {
-      if (confirm("모든 학습 완료 기록과 ‘내 문장 만들기’ 메모를 지울까요? 되돌릴 수 없어요.\n(먼저 내보내기로 백업해 두는 걸 추천해요)")) { mem = { items: {}, notes: {} }; save(); toast("진도를 초기화했어요"); rerender(); }
+      if (confirm("모든 학습 완료 기록, 복습 간격, 오답 노트와 ‘내 문장 만들기’ 메모를 지울까요? 되돌릴 수 없어요.\n(먼저 내보내기로 백업해 두는 걸 추천해요)")) { mem = Study.emptyMem(); save(); toast("진도를 초기화했어요"); rerender(); }
     }
   });
   window.addEventListener("hashchange", route);
   window.addEventListener("storage", function (e) { if (e.key === STORE_KEY) { load(); rerender(); } });
+  if (window.speechSynthesis && speechSynthesis.addEventListener) {
+    speechSynthesis.addEventListener("voiceschanged", function () {});
+  }
+  window.__ES = {
+    getMem: function () { return mem; },
+    setMem: function (m) { mem = Study.normalizeMem(m); save(); },
+    load: load,
+    setDone: setDone,
+    getCorpus: getCorpus,
+    route: route,
+    rerender: rerender,
+    quiz: quiz,
+    shadow: shadow
+  };
   route();
 })();
