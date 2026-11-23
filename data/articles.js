@@ -4,6 +4,254 @@
  */
 window.ARTICLES = [
   {
+    "id": "d20261124",
+    "date": "2026-11-24",
+    "dateLabel": "2026년 11월 24일 (화)",
+    "title": "젠슨황, 11일만에 엔비디아 CEO 전격복귀…이사회 \"안보위험 없다\"(종합2보)",
+    "outlet": "연합뉴스 (Yonhap News)",
+    "url": "https://n.news.naver.com/article/001/0016459317",
+    "published": "2026년 11월 24일 00:55 (KST, 네이버 뉴스 게재 기준)",
+    "field": "경제 · 기업/지배구조 · 반도체",
+    "basis": "네이버 뉴스 언론사별 랭킹(많이 본 뉴스, 11/24 06:45 KST경 확인)에서 연합뉴스 1위. 같은 ‘젠슨 황 엔비디아 CEO 복귀’ 화제가 KBS·MBC·YTN·JTBC·MBN·국민일보·한국일보·한겨레·경향신문 1위 등 50곳 이상 언론사 상위 5위 안에 동시에 올라 국내에서 가장 넓게 읽힌 이슈였습니다. 미국에서도 Yahoo News 메인 톱기사가 ‘Nvidia CEO 복귀가 촉발한 월가 급반등’, 2번째 헤드라인이 ‘트럼프, 젠슨 황 복귀 설득했다’였고 Reuters의 관련 기사가 13만 회 이상 읽혀 한·미 공통 최대 화제로 판단했습니다. (정확한 클릭 수는 비공개라 랭킹으로 대신 판단)",
+    "summary": "불륜 스캔들로 지난 12일 사임했던 젠슨 황이 11일 만인 23일(현지시간) 엔비디아 CEO 겸 이사로 복귀했습니다. 이사회는 만장일치로 의결하며 ‘미 정부 고위급의 의견을 바탕으로 국가안보 위험이 없다고 확신한다’고 밝혔고, 트럼프 대통령도 ‘올바른 결정’이라며 환영했습니다. 다만 AI칩 중국 우회반출 등 수출통제 준수 여부는 사외이사 위원회가 외부 법률 자문과 함께 계속 조사합니다.",
+    "titleCard": {
+      "no": 1,
+      "ko": "젠슨황, 11일만에 엔비디아 CEO 전격복귀…이사회 \"안보위험 없다\"",
+      "ultra": "Jensen Huang Back as Nvidia CEO After 11 Days; Board Sees No Security Risk",
+      "biz": "Jensen Huang has been abruptly reinstated as Nvidia’s CEO just 11 days after stepping down, with the board stating that his return poses no national security risk.",
+      "note": "‘전격 복귀’는 abrupt/surprise return, 기업 문맥에서는 be reinstated as CEO가 가장 정확합니다. ‘11일 만에’는 just 11 days after ~ / 11 days later. ‘안보위험 없다’는 poses no national security risk – risk는 pose(초래하다)와 짝을 이룹니다. 헤드라인에서는 be동사를 빼고 Back as CEO처럼 줄입니다."
+    },
+    "cards": [
+      {
+        "no": 2,
+        "ko": "젠슨 황이 23일(현지시간) 엔비디아 최고경영자(CEO)로 복귀했다. 지난 12일 사임한 지 11일 만이다.",
+        "ultra": "Huang returned as Nvidia CEO on the 23rd, 11 days after resigning.",
+        "biz": "Jensen Huang returned as Nvidia’s chief executive officer on November 23 (local time), just 11 days after resigning on November 12.",
+        "note": "‘(현지시간)’은 (local time)으로 그대로 붙입니다. ‘~한 지 11일 만이다’라는 별도 문장은 영어에서 just 11 days after ~ing로 한 문장에 합치는 것이 자연스럽습니다.",
+        "alts": [
+          "was reinstated as CEO",
+          "a mere 11 days after stepping down",
+          "made a comeback as chief executive"
+        ]
+      },
+      {
+        "no": 3,
+        "ko": "엔비디아는 이날 이사회에서 젠슨 황을 사장 겸 CEO 및 이사회 이사로 복귀시키는 안건을 만장일치로 의결했으며, 이는 즉시 효력이 발생한다고 보도자료를 통해 발표했다.",
+        "ultra": "The board unanimously reinstated him, effective immediately.",
+        "biz": "Nvidia announced in a press release that its board had unanimously voted to reinstate Huang as president, CEO and a member of the board, effective immediately.",
+        "note": "‘안건을 만장일치로 의결하다’는 unanimously vote to / unanimously approve a resolution. ‘즉시 효력이 발생한다’는 공시·보도자료의 고정 표현 effective immediately. ‘사장 겸 CEO’는 president and CEO.",
+        "alts": [
+          "passed a unanimous resolution",
+          "with immediate effect",
+          "approved by a unanimous vote"
+        ]
+      },
+      {
+        "no": 4,
+        "ko": "엔비디아는 \"황과 일련의 논의 및 회의를 진행\"한 결과 \"그의 솔직함과 엔비디아를 이끌 능력에 만족하게 됐다\"고 의결 사유를 설명했다.",
+        "ultra": "After talks with Huang, the board was satisfied with his candor and ability to lead.",
+        "biz": "Explaining its decision, Nvidia said that following a series of discussions and meetings with Huang, it had become satisfied with his candor and his ability to lead the company.",
+        "note": "‘솔직함’은 candor(격식체) / transparency, ‘~에 만족하게 됐다’는 become satisfied with / be comfortable with. ‘의결 사유를 설명했다’는 explaining its decision / citing the reasons for its decision으로 앞에 분사구로 둡니다.",
+        "alts": [
+          "following a series of discussions",
+          "was comfortable with his transparency",
+          "cited his candor as the basis"
+        ]
+      },
+      {
+        "no": 5,
+        "ko": "특히 \"이사회는 결정을 내리는 과정에서 미국 정부 고위급 인사들의 의견을 전달받았다\"며 \"그런 의견을 바탕으로 황의 복귀가 국가안보상 위험을 초래하지 않는다고 확신한다\"고 밝혔다.",
+        "ultra": "Based on senior U.S. officials’ input, the board is confident his return poses no security risk.",
+        "biz": "Notably, the board said it had received input from senior U.S. government officials in reaching its decision and, based on that input, was confident that Huang’s return does not pose a national security risk.",
+        "note": "‘의견을 전달받다’는 receive input from. ‘결정을 내리는 과정에서’는 in reaching its decision. ‘~을 바탕으로’는 based on, ‘확신한다’는 be confident that. ‘위험을 초래하다’는 pose a risk가 정석 콜로케이션입니다.",
+        "alts": [
+          "took into account the views of",
+          "on the strength of that input",
+          "is satisfied that ~ presents no risk"
+        ]
+      },
+      {
+        "no": 6,
+        "ko": "젠슨 황은 \"새로운 산업혁명이 시작되는 시점에 엔비디아로 돌아와 세계에서 가장 중요한 기술기업을 이끌게 돼 영광\"이라며 \"최대한 겸손하고 다시 헌신하겠다는 각오로 이 책임을 받아들인다\"고 밝혔다.",
+        "ultra": "Huang said he is honored to return and accepts the role with humility and renewed commitment.",
+        "biz": "Huang said he was honored to return to Nvidia and lead the world’s most important technology company at the dawn of a new industrial revolution, adding that he accepts the responsibility “with the utmost humility and renewed dedication.”",
+        "note": "‘~하게 돼 영광’은 be honored to. ‘시작되는 시점에’는 at the dawn of / at the onset of. ‘최대한 겸손하게’는 with the utmost humility, ‘다시 헌신하겠다는 각오로’는 with renewed dedication/commitment. 인용을 잇는 ‘~라며’는 adding that으로 처리합니다.",
+        "alts": [
+          "it is a privilege to",
+          "at the start of a new industrial revolution",
+          "with a renewed sense of commitment"
+        ]
+      },
+      {
+        "no": 7,
+        "ko": "젠슨 황의 복귀를 촉구해 온 도널드 트럼프 미국 대통령은 소셜미디어 트루스소셜에서 \"올바르고 타당한 결정\"이라며 \"엔비디아뿐만 아니라 미국 경제의 번영과 성공을 위해 젠슨의 리더십이 필요하다\"고 환영했다.",
+        "ultra": "Trump, who had pushed for his return, welcomed it as the right decision.",
+        "biz": "President Donald Trump, who had been urging Huang’s return, welcomed the decision on Truth Social as “the right and appropriate one,” saying Jensen’s leadership is needed not only for Nvidia but for the prosperity and success of the U.S. economy.",
+        "note": "‘촉구해 온’은 who had been urging / had pushed for (과거완료 진행으로 지속성 표현). ‘환영했다’는 welcomed the decision as ~. ‘A뿐만 아니라 B’는 not only A but (also) B.",
+        "alts": [
+          "had called for his reinstatement",
+          "hailed the move as",
+          "is essential to the prosperity of"
+        ]
+      },
+      {
+        "no": 8,
+        "ko": "트럼프 대통령은 \"법무부 장관은 그가 불법행위에 관여했다는 증거를 미국 정부가 보유하고 있지 않다는 점을 확인했다\"고 말했다.",
+        "ultra": "Trump said the DOJ found no evidence of wrongdoing.",
+        "biz": "Trump said the Attorney General had confirmed that the U.S. government has no evidence that Huang was involved in any illegal activity.",
+        "note": "‘법무부 장관’은 미국에서는 the Attorney General. ‘불법행위에 관여하다’는 be involved in illegal activity / wrongdoing. ‘증거를 보유하고 있지 않다’는 has no evidence that ~ 으로 간결하게.",
+        "alts": [
+          "found no evidence of wrongdoing",
+          "was not implicated in any illegal conduct",
+          "there is no evidence linking him to"
+        ]
+      },
+      {
+        "no": 9,
+        "ko": "엔비디아는 트럼프 대통령의 언급대로 독립적인 사외이사들로 구성된 위원회를 꾸려 이번 사태에 대한 조사를 이어갈 방침이며, 이를 지원할 외부 법률 자문을 선임했다고 발표했다.",
+        "ultra": "Nvidia will keep investigating via an independent-director committee and has hired outside counsel.",
+        "biz": "In line with Trump’s remarks, Nvidia said it will continue investigating the matter through a committee of independent directors and has retained outside legal counsel to support the review.",
+        "note": "‘~의 언급대로’는 in line with ~’s remarks. ‘사외이사’는 independent (non-executive) director. ‘외부 법률 자문을 선임하다’는 retain/engage outside counsel – 실무에서 자주 쓰는 표현입니다. ‘사태’는 the matter / the situation.",
+        "alts": [
+          "has engaged external legal advisers",
+          "a special committee of independent directors",
+          "will press ahead with its internal probe"
+        ]
+      }
+    ],
+    "translation": [
+      "※ 저작권 보호를 위해 원문 전체를 옮기지 않고, 기사 핵심을 비즈니스 영어로 압축 정리한 요약 번역입니다. 원문은 아래 ‘원문 기사’ 링크에서 확인하세요.",
+      "Jensen Huang returned as Nvidia’s chief executive on November 23 (local time), just 11 days after resigning. Nvidia’s board unanimously voted to reinstate him as president, CEO and director, effective immediately, saying that after a series of discussions it had become satisfied with his candor and his ability to lead the company.",
+      "The board said it had received input from senior U.S. government officials and, on that basis, was confident that Huang’s return poses no national security risk. Huang said he was honored to lead “the world’s most important technology company” at the dawn of a new industrial revolution, and that he accepts the role with the utmost humility and renewed dedication. He thanked the board, chair Harvey Jones, CFO Colette Kress and the management team, as well as employees, shareholders, partners and, above all, his family.",
+      "President Trump, who had pushed for Huang’s return, called it “the right and appropriate decision” on Truth Social, saying Jensen’s leadership is needed for the prosperity of both Nvidia and the U.S. economy. He added that the government sees no reason to view the return as a security risk and that the Attorney General had confirmed there is no evidence of Huang’s involvement in illegal activity. Yonhap notes that the wording matches Nvidia’s press release, suggesting Trump’s stance was decisive.",
+      "Huang had stepped down after admitting to an affair with Alice Huang, whom U.S. intelligence suspects of spying for China and of involvement in smuggling Nvidia’s advanced AI chips to China. Senior administration officials have maintained that Huang was unaware of her identity.",
+      "Treasury Secretary Scott Bessent said a day earlier that whether Nvidia complied with export-control guidance is a separate issue from the scandal and that ultimate responsibility must be determined. Yonhap reads the board’s “no security risk” statement as a rationale for Huang’s return: either Nvidia complied, or any lapse was not his fault.",
+      "Trump urged Nvidia to conduct a thorough internal review of its export-control compliance. Nvidia said a committee of independent directors will continue the investigation with outside legal counsel. It recently launched a National Security and Export Control Committee made up solely of independent directors and is searching for a chief compliance officer who will report to the board’s nominating and corporate governance committee."
+    ],
+    "expressions": [
+      [
+        "1",
+        "CEO로 복귀시키다",
+        "reinstate (someone) as CEO",
+        "The board voted to reinstate her as CEO."
+      ],
+      [
+        "2",
+        "전격 복귀",
+        "surprise comeback / abrupt return",
+        "His surprise comeback lifted the stock."
+      ],
+      [
+        "3",
+        "만장일치로 의결하다",
+        "vote unanimously to",
+        "Directors voted unanimously to approve the deal."
+      ],
+      [
+        "4",
+        "즉시 효력 발생",
+        "effective immediately",
+        "The appointment is effective immediately."
+      ],
+      [
+        "5",
+        "보도자료를 통해 발표하다",
+        "announce in a press release",
+        "The company announced the change in a press release."
+      ],
+      [
+        "6",
+        "일련의 논의",
+        "a series of discussions",
+        "After a series of discussions, both sides agreed on terms."
+      ],
+      [
+        "7",
+        "솔직함",
+        "candor",
+        "Investors appreciated management’s candor."
+      ],
+      [
+        "8",
+        "~의 의견을 전달받다",
+        "receive input from",
+        "We received input from senior regulators."
+      ],
+      [
+        "9",
+        "위험을 초래하다",
+        "pose a risk",
+        "The structure does not pose a material risk to lenders."
+      ],
+      [
+        "10",
+        "국가안보 위험",
+        "national security risk",
+        "The deal was reviewed for national security risks."
+      ],
+      [
+        "11",
+        "~하게 돼 영광이다",
+        "be honored to",
+        "I am honored to join the team."
+      ],
+      [
+        "12",
+        "~가 시작되는 시점에",
+        "at the dawn of",
+        "We are at the dawn of a new credit cycle."
+      ],
+      [
+        "13",
+        "새로운 각오로 헌신하다",
+        "with renewed dedication",
+        "We will serve our clients with renewed dedication."
+      ],
+      [
+        "14",
+        "복귀를 촉구하다",
+        "urge (someone’s) return / call for",
+        "Shareholders called for his return."
+      ],
+      [
+        "15",
+        "불법행위에 관여하다",
+        "be involved in wrongdoing",
+        "There is no evidence he was involved in wrongdoing."
+      ],
+      [
+        "16",
+        "수출통제 준수",
+        "export-control compliance",
+        "The firm strengthened its export-control compliance."
+      ],
+      [
+        "17",
+        "사외이사",
+        "independent director",
+        "The committee consists solely of independent directors."
+      ],
+      [
+        "18",
+        "외부 법률 자문을 선임하다",
+        "retain outside counsel",
+        "The issuer retained outside counsel for the review."
+      ],
+      [
+        "19",
+        "최고준법책임자",
+        "chief compliance officer (CCO)",
+        "The CCO reports directly to the board."
+      ],
+      [
+        "20",
+        "지명·기업지배구조위원회",
+        "nominating and corporate governance committee",
+        "The nominating and corporate governance committee oversees board appointments."
+      ]
+    ]
+  },
+  {
     "id": "d20261123",
     "date": "2026-11-23",
     "dateLabel": "2026년 11월 23일 (월)",
