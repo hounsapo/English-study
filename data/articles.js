@@ -4,6 +4,254 @@
  */
 window.ARTICLES = [
   {
+    "id": "d20261127",
+    "date": "2026-11-27",
+    "dateLabel": "2026년 11월 27일 (금)",
+    "title": "美, 중국 등 14개 경제주체에 과잉생산 관세…韓 15% 상한 유지(종합2보)",
+    "outlet": "연합뉴스 (Yonhap News)",
+    "url": "https://m.news.nate.com/view/20261126n00630",
+    "published": "2026년 11월 26일 05:10 (KST, 연합뉴스 송고 기준 · 네이트 뉴스 게재본)",
+    "field": "경제 · 통상/관세 · 산업정책",
+    "basis": "네이버 뉴스 언론사별 랭킹 페이지는 11/27 06:55 KST경 접속이 차단돼 직접 확인하지 못했습니다. 대신 11/26 방송사 메인뉴스 톱기사를 확인한 결과, MBC 뉴스데스크와 JTBC 뉴스룸이 모두 ‘미국 과잉생산 관세·한국 15% 유지’를 1·2번 톱뉴스로 다뤘고, 같은 날 KBS 뉴스9은 종부세, SBS·MBN·채널A는 북한 핵시설을 톱으로 다뤄 경제 이슈 중에서는 관세 이슈가 가장 넓게 톱에 올랐습니다(한은 기준금리 인상은 SBS 3번째). 미국에서도 Reuters 등이 ‘US proposes new tariffs on 14 trading partners’로 크게 보도해 한·미 공통 화제로 판단했습니다. 최근 7일간 다룬 엔비디아·증안펀드·나스닥 이슈와도 겹치지 않습니다. (정확한 클릭 수는 비공개라 톱뉴스 배치·보도 범위로 대신 판단)",
+    "summary": "미국 무역대표부(USTR)가 25일(현지시간) 무역법 301조에 따라 한국·일본·중국·EU 등 14개 경제주체에 ‘과잉생산 관세’ 부과를 제안했습니다. 한국에는 모든 상품에 최대 15%가 제시돼 작년 무역합의의 15% 상한이 유지됐지만, 협의나 약속 이행이 불만족스러우면 25%로 올릴 수 있다는 단서가 붙었습니다. USTR은 자동차·반도체·석유화학을 지목하며 한국의 산업정책과 정책금융 우대대출을 문제 삼았습니다.",
+    "titleCard": {
+      "no": 1,
+      "ko": "美, 중국 등 14개 경제주체에 과잉생산 관세…韓 15% 상한 유지",
+      "ultra": "US Proposes Overcapacity Tariffs on 14 Economies; Korea Keeps 15% Cap",
+      "biz": "The U.S. has proposed overcapacity tariffs on 14 economies, including China, while Korea’s tariff ceiling remains at 15%.",
+      "note": "‘과잉생산’은 통상 문맥에서 overcapacity / excess capacity가 표준 용어입니다. ‘경제주체’는 국가가 아닌 EU·대만까지 포함하므로 countries 대신 economies로 옮깁니다. ‘상한 유지’는 keep/retain the 15% cap, 서술형으로는 the ceiling remains at 15%."
+    },
+    "cards": [
+      {
+        "no": 2,
+        "ko": "미국 무역대표부(USTR)는 25일(현지시간) 무역법 301조에 따라 한국·일본·중국·EU 등 14개 경제주체에 ‘과잉생산 관세’를 부과하겠다고 제안했다.",
+        "ultra": "USTR proposed Section 301 overcapacity tariffs on 14 economies on the 25th.",
+        "biz": "On November 25 (local time), the Office of the U.S. Trade Representative (USTR) proposed overcapacity tariffs on 14 economies, including Korea, Japan, China and the EU, under Section 301 of the Trade Act of 1974.",
+        "note": "‘~에 따라’는 법 조항 근거를 나타내므로 under Section 301이 정확합니다. ‘관세를 부과하다’는 impose/levy tariffs on, 아직 확정 전이므로 proposed를 씁니다. 나열은 including A, B, C and D로 정리합니다.",
+        "alts": [
+          "pursuant to Section 301",
+          "floated new tariffs on",
+          "taking into account global overcapacity"
+        ]
+      },
+      {
+        "no": 3,
+        "ko": "USTR은 지난 3월 16개 경제주체를 대상으로 301조 조사에 착수했으며, 이번 제안 대상에서 멕시코와 노르웨이는 제외됐다.",
+        "ultra": "The probe began in March with 16 economies; Mexico and Norway were dropped.",
+        "biz": "The USTR launched its Section 301 investigation into 16 economies in March, and Mexico and Norway were excluded from the latest proposal.",
+        "note": "‘조사에 착수하다’는 launch/open an investigation into. ‘제외됐다’는 be excluded from / be dropped from the list. 헤드라인·구어체에서는 probe가 investigation을 대신합니다.",
+        "alts": [
+          "initiated a probe into",
+          "were spared from the proposal",
+          "were left off the list"
+        ]
+      },
+      {
+        "no": 4,
+        "ko": "한국에 대해서는 모든 상품에 최대 15%의 관세를 부과할 수 있도록 해 작년 한미 무역합의에서 정한 15% 상한을 유지했다.",
+        "ultra": "Korea faces up to 15% on all goods, keeping last year’s cap.",
+        "biz": "For Korea, the proposal allows tariffs of up to 15% on all goods, preserving the 15% ceiling set under last year’s Korea-U.S. trade agreement.",
+        "note": "‘최대 15%’는 up to 15%. ‘~에서 정한 상한을 유지했다’는 앞 문장의 결과이므로 분사구 preserving/maintaining the ceiling set under ~로 이어 붙입니다. cap과 ceiling은 같은 뜻으로 번갈아 쓸 수 있습니다.",
+        "alts": [
+          "maintaining the 15% cap",
+          "consistent with the agreed ceiling",
+          "tariffs capped at 15%"
+        ]
+      },
+      {
+        "no": 5,
+        "ko": "한국은 작년 무역합의에서 3,500억 달러 규모의 대미 투자를 약속하고 관세율을 25%에서 15%로 낮췄다.",
+        "ultra": "Korea pledged $350B in U.S. investment to cut tariffs from 25% to 15%.",
+        "biz": "Under last year’s deal, Korea pledged USD 350 billion in investment in the U.S. in exchange for a reduction in tariffs from 25% to 15%.",
+        "note": "‘3,500억 달러’는 USD 350 billion / $350B. 투자 약속과 관세 인하의 맞교환 관계는 in exchange for로 드러내면 논리가 분명해집니다. ‘대미 투자’는 investment in the U.S. / U.S.-bound investment.",
+        "alts": [
+          "committed USD 350 billion",
+          "in return for lower tariffs",
+          "secured a tariff cut to 15%"
+        ]
+      },
+      {
+        "no": 6,
+        "ko": "다만 USTR은 협의나 약속 이행이 만족스럽지 않을 경우 한국의 관세율을 25%로 올릴 수 있다고 밝혔다.",
+        "ultra": "But the rate could rise to 25% if talks or commitments fall short.",
+        "biz": "However, the USTR said it could raise Korea’s rate to 25% if consultations or the implementation of commitments prove unsatisfactory.",
+        "note": "‘다만’은 However / That said. ‘만족스럽지 않을 경우’는 prove unsatisfactory / fall short가 자연스럽습니다. ‘약속 이행’은 implementation of commitments, 투자제안서에서는 delivery on commitments도 자주 씁니다.",
+        "alts": [
+          "if commitments are not met",
+          "should talks fall short",
+          "reserved the right to raise"
+        ]
+      },
+      {
+        "no": 7,
+        "ko": "USTR은 한국의 업종별 계획, 정책금융기관을 통한 우대 대출 등 산업정책을 문제 삼으며 자동차·반도체·석유화학을 지목했다.",
+        "ultra": "USTR faulted Korea’s industrial policy, citing autos, chips and petrochemicals.",
+        "biz": "The USTR took issue with Korea’s industrial policy, including sector-specific plans and preferential lending through policy finance institutions, singling out autos, semiconductors and petrochemicals.",
+        "note": "‘문제 삼다’는 take issue with / criticize. ‘지목하다’는 single out. ‘정책금융기관’은 policy finance institutions / state-backed lenders, ‘우대 대출’은 preferential lending / concessional loans입니다.",
+        "alts": [
+          "raised concerns over",
+          "concessional financing from state-backed lenders",
+          "highlighted autos, chips and petrochemicals"
+        ]
+      },
+      {
+        "no": 8,
+        "ko": "중국에 대한 과잉생산 관세는 미중 무역 휴전에서 정한 상한과 같은 20%로, 트럼프 1기 때 일부 품목에 부과된 약 25%의 관세에 더해진다.",
+        "ultra": "China faces 20%, on top of about 25% from Trump’s first term.",
+        "biz": "For China, the proposed overcapacity tariff is 20%, matching the cap under the U.S.-China trade truce, and would be added on top of the roughly 25% duties imposed on some goods during Trump’s first term.",
+        "note": "‘~와 같은’은 matching / in line with. ‘~에 더해진다’는 be added on top of / be stacked on, 관세가 겹치는 상황을 stacking이라고도 합니다. ‘약 25%’는 roughly/about 25%.",
+        "alts": [
+          "stacked on existing duties",
+          "equal to the truce cap",
+          "layered on top of"
+        ]
+      },
+      {
+        "no": 9,
+        "ko": "한국에는 지난 6월 발표돼 7월 확정된 12.5%의 ‘강제노동 관세’가 별도로 부과되고 있으나, 두 관세를 합쳐도 15% 안에 머물 것으로 전망된다.",
+        "ultra": "With the 12.5% forced-labor tariff, Korea’s combined rate should stay within 15%.",
+        "biz": "Korea is separately subject to a 12.5% forced-labor tariff announced in June and finalized in July, but the combined rate is expected to remain within the 15% cap.",
+        "note": "‘별도로 부과되고 있다’는 be separately subject to. ‘합쳐도’는 the combined rate / taken together. ‘~안에 머물 것으로 전망된다’는 be expected to remain within ~로, 전망 주체가 불분명할 때 수동형 be expected to가 무난합니다.",
+        "alts": [
+          "taken together",
+          "is projected to stay below",
+          "the cumulative tariff burden"
+        ]
+      }
+    ],
+    "translation": [
+      "※ 저작권 보호를 위해 원문 전체를 옮기지 않고, 기사 핵심을 비즈니스 영어로 압축 정리한 요약 번역입니다. 원문은 아래 ‘원문 기사’ 링크에서 확인하세요.",
+      "On November 25 (local time), the Office of the U.S. Trade Representative (USTR) proposed “overcapacity” tariffs on 14 economies, including Korea, Japan, China and the EU, under Section 301 of the Trade Act of 1974. The Section 301 investigation was launched in March and covered 16 economies; Mexico and Norway were left out of the proposed list.",
+      "For Korea, the proposal allows tariffs of up to 15% on all goods, preserving the ceiling set under last year’s Korea-U.S. trade deal. Under that agreement, Korea pledged USD 350 billion in U.S. investment in exchange for a cut in tariffs from 25% to 15%.",
+      "The USTR, however, attached a caveat: it could raise Korea’s rate to 25% if consultations or the implementation of commitments prove unsatisfactory. It took issue with Korea’s industrial policy, including sector-specific plans and preferential lending through policy finance institutions, and singled out autos, semiconductors and petrochemicals. It also said Korea is not adequately addressing global overcapacity in how it handles imports from non-market economies and foreign direct investment.",
+      "Japan, the EU and Taiwan likewise keep a 15% ceiling. China’s proposed overcapacity tariff is 20%, matching the cap agreed under the U.S.-China trade truce, and would be layered on top of the roughly 25% duties applied to some goods since Trump’s first term.",
+      "The proposed rates will be finalized after the affected economies submit their comments, with the process running to January 25 next year. Separately, Korea is already subject to a 12.5% forced-labor tariff announced in June and finalized in July, but the combined rate is expected to stay within 15%.",
+      "The overcapacity tariffs follow the Supreme Court’s February ruling that the Trump administration’s reciprocal tariffs were unlawful, after which the administration shifted its tariff strategy to Section 301."
+    ],
+    "expressions": [
+      [
+        "1",
+        "과잉생산 관세",
+        "overcapacity tariff / excess capacity tariff",
+        "The proposed overcapacity tariff could weigh on Korean exporters’ margins next year."
+      ],
+      [
+        "2",
+        "~에 관세를 부과하다",
+        "impose tariffs on (something) / levy tariffs on (something)",
+        "Washington plans to impose tariffs on goods from 14 economies."
+      ],
+      [
+        "3",
+        "무역법 301조에 따라",
+        "under Section 301",
+        "The duties would be imposed under Section 301 of the Trade Act of 1974."
+      ],
+      [
+        "4",
+        "경제주체",
+        "economies",
+        "The list covers 14 economies, including the EU and Taiwan."
+      ],
+      [
+        "5",
+        "~에 대한 조사에 착수하다",
+        "launch an investigation into (something) / open a probe into (something)",
+        "The regulator launched an investigation into the company’s lending practices."
+      ],
+      [
+        "6",
+        "~에서 제외되다",
+        "be excluded from (something) / be dropped from (something)",
+        "Two issuers were excluded from the index after the review."
+      ],
+      [
+        "7",
+        "15% 상한을 유지하다",
+        "keep the 15% cap / maintain the 15% ceiling",
+        "The deal allows Korea to keep the 15% cap on most exports."
+      ],
+      [
+        "8",
+        "최대 15%",
+        "up to 15%",
+        "The fund may allocate up to 15% of its capital to mezzanine debt."
+      ],
+      [
+        "9",
+        "~하는 대가로",
+        "in exchange for (something) / in return for (something)",
+        "The sponsor agreed to a higher equity stake in exchange for lower interest costs."
+      ],
+      [
+        "10",
+        "투자를 약속하다",
+        "pledge investment / commit investment",
+        "The consortium pledged USD 2 billion in investment over five years."
+      ],
+      [
+        "11",
+        "만족스럽지 않을 경우",
+        "prove unsatisfactory / fall short",
+        "Lenders may accelerate the loan if the sponsor’s performance proves unsatisfactory."
+      ],
+      [
+        "12",
+        "약속 이행",
+        "implementation of commitments / delivery on commitments",
+        "Investors are closely watching management’s delivery on commitments."
+      ],
+      [
+        "13",
+        "~을 문제 삼다",
+        "take issue with (something)",
+        "Several shareholders took issue with the proposed dilution."
+      ],
+      [
+        "14",
+        "~을 지목하다",
+        "single out (something)",
+        "The report singled out commercial real estate as a key risk area."
+      ],
+      [
+        "15",
+        "정책금융기관",
+        "policy finance institutions / state-backed lenders",
+        "Policy finance institutions provided bridge financing for the project."
+      ],
+      [
+        "16",
+        "우대 대출",
+        "preferential lending / concessional loans",
+        "The program offers preferential lending to export-oriented manufacturers."
+      ],
+      [
+        "17",
+        "~에 더해 부과되다",
+        "be added on top of (something) / be stacked on (something)",
+        "The new levy would be added on top of existing anti-dumping duties."
+      ],
+      [
+        "18",
+        "~에 별도로 적용받다",
+        "be separately subject to (something)",
+        "The subsidiary is separately subject to local capital requirements."
+      ],
+      [
+        "19",
+        "~안에 머물 것으로 예상되다",
+        "be expected to remain within (something)",
+        "Leverage is expected to remain within the covenant limit through 2027."
+      ],
+      [
+        "20",
+        "최악은 피하다",
+        "avoid the worst-case scenario",
+        "By refinancing early, the developer avoided the worst-case scenario of a maturity default."
+      ]
+    ]
+  },
+  {
     "id": "d20261124",
     "date": "2026-11-24",
     "dateLabel": "2026년 11월 24일 (화)",
