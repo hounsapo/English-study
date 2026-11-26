@@ -171,6 +171,7 @@
     if (a) {
       h += '<a class="card today" href="#/articles/' + esc(a.id) + '"><div class="row"><span class="pill green">' + esc(a.dateLabel) + '</span><span class="pill">' + esc(a.field) + "</span>" +
         (isDone("article:" + a.id) ? '<span class="done-badge">✓ 학습 완료</span>' : "") + '</div><div class="t">' + esc(a.title) + '</div><div class="sum">' + esc(a.summary) + '</div><div class="small muted" style="margin-top:10px">' + esc(outletName(a)) + " · " + esc(a.published) + ' · <span style="color:var(--accent);font-weight:600">공부하러 가기 →</span></div></a>';
+      h += '<a class="card tr-cta" href="#/train/' + esc(a.id) + '"><b>✍️ 이 기사로 출력 훈련</b><span class="small muted">역번역 · 받아쓰기 · 핵심 표현 · 요약 말하기 — 정답을 보기 전에 먼저 만들어 보세요' + (window.Train && window.Train.todayCount() ? ' · 오늘 ' + window.Train.todayCount() + '문항 완료' : '') + '</span></a>';
     } else h += '<div class="card muted">아직 등록된 기사가 없어요.</div>';
     h += "</div>";
 
@@ -189,6 +190,7 @@
     h += '<a class="unit-card" href="#/articles"><div class="t">🗂 날짜별 기사 아카이브</div><div class="s">지금까지 쌓인 기사 ' + ARTICLES.length + "편을 최신순으로 볼 수 있어요.</div></a>";
     h += '<a class="unit-card" href="#/grammar"><div class="t">📚 문법 구문 전체</div><div class="s">접속사부터 비즈니스 연결표현까지 ' + GRAMMAR.length + "개 유닛</div></a>";
     h += '<a class="unit-card" href="#/chunks"><div class="t">🗣 표현 덩어리</div><div class="s">연어·이디엄·담화 표지어를 통째로 외우고 내 문장을 만들어 보세요.</div></a>';
+    h += '<a class="unit-card" href="#/train"><div class="t">✍️ 출력 훈련</div><div class="s">오늘의 기사로 역번역·받아쓰기·핵심 표현·요약 말하기(4/3/2)</div></a>';
     h += '<a class="unit-card" href="#/review"><div class="t">🔁 오늘의 복습</div><div class="s">간격 반복, 떠올리기, 빈칸 채우기, 따라 말하기</div></a>';
     h += '<a class="unit-card" href="#/progress"><div class="t">✅ 진도 관리</div><div class="s">완료 기록 보기, 내보내기/가져오기, 초기화</div></a>';
     h += "</div></div>";
@@ -222,7 +224,7 @@
     h += '<dl class="props"><dt>제목</dt><dd>' + esc(a.title) + "</dd><dt>출처</dt><dd><a href=\"" + esc(a.url) + '" target="_blank" rel="noopener noreferrer">' + esc(a.outlet) + "</a></dd><dt>게시일</dt><dd>" + esc(a.published) + "</dd><dt>분야</dt><dd>" + esc(a.field) + "</dd>" +
       (a.basis ? "<dt>선정 기준</dt><dd>" + esc(a.basis) + "</dd>" : "") + "</dl>";
     h += '<div class="callout"><b>핵심 내용</b>' + esc(a.summary) + "</div>";
-    h += '<div class="jump" aria-label="섹션 이동"><button data-jump="sec-1">1. 제목</button><button data-jump="sec-2">2~9. 문장</button><button data-jump="sec-10">10. 번역</button><button data-jump="sec-11">11. 핵심 표현</button><button data-jump="sec-src">원문</button></div></section>';
+    h += '<div class="jump" aria-label="섹션 이동"><button data-jump="sec-1">1. 제목</button><button data-jump="sec-2">2~9. 문장</button><button data-jump="sec-10">10. 번역</button><button data-jump="sec-11">11. 핵심 표현</button><button data-jump="sec-src">원문</button></div><div class="row" style="margin-top:14px"><a class="btn primary" href="#/train/' + esc(a.id) + '">✍️ 이 기사로 출력 훈련</a><span class="small muted">정답을 보기 전에 먼저 영어로 만들어 보세요</span></div></section>';
 
     h += '<section class="section" id="sec-1"><div class="section-title">1. 제목 분석</div>' + colorKey() + studyCard(a.titleCard) + "</section>";
     h += '<section class="section" id="sec-2"><div class="section-title">2~9. 문장별 분석</div>' + colorKey() + a.cards.map(studyCard).join("") + "</section>";
@@ -909,6 +911,7 @@
     var parts = hash.split("/").filter(Boolean);
     var section = parts[0] || "home", html;
     if (section !== "review" || parts[1] !== "shadow") stopShadow();
+    if (section !== "train" && window.Train) window.Train.leave();
     if (section === "home") html = viewHome();
     else if (section === "articles") html = parts[1] ? viewArticle(decodeURIComponent(parts[1])) : viewArticles();
     else if (section === "grammar") html = parts[1] ? viewUnit(decodeURIComponent(parts[1])) : viewGrammar();
@@ -921,10 +924,11 @@
       else html = viewReview();
     }
     else if (section === "progress") html = viewProgress();
+    else if (section === "train" && window.Train) html = window.Train.view(parts.map(decodeURIComponent), ARTICLES);
     else html = notFound();
     app.innerHTML = html;
     document.querySelectorAll("[data-nav]").forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-nav") === section); });
-    var titles = { home: "홈", articles: "오늘의 학습 기사", grammar: "문법 구문", chunks: "표현 덩어리", review: "오늘의 복습", progress: "진도" };
+    var titles = { home: "홈", articles: "오늘의 학습 기사", grammar: "문법 구문", chunks: "표현 덩어리", review: "오늘의 복습", progress: "진도", train: "출력 훈련" };
     var pageTitle = titles[section] || "영어 공부방";
     if (section === "review") {
       var sub = { recall: "떠올리기", cloze: "빈칸 채우기", shadow: "듣고 따라 말하기", misses: "오답 노트" };
@@ -960,6 +964,7 @@
   });
   app.addEventListener("change", function (e) {
     var t = e.target;
+    if (window.Train && window.Train.onChange(e)) return;
     if (t.matches('input[type="checkbox"][data-key]')) {
       flushNotes();
       setDone(t.getAttribute("data-key"), t.checked);
@@ -1006,6 +1011,7 @@
     }
   });
   app.addEventListener("click", function (e) {
+    if (window.Train && window.Train.onClick(e, rerender)) return;
     var sp = e.target.closest("[data-speak]");
     if (sp) {
       e.preventDefault();
