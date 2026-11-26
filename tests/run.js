@@ -400,7 +400,7 @@ function solveCurrent(ctx, right) {
   if (right) { d.getElementById("trExpr").value = answerFor(w, it); d.querySelector('[data-trcheck="meaning"]').click(); }
   else d.querySelector('[data-trskip="meaning"]').click();
   if (d.getElementById("trCloze")) {
-    var c = w.Study.clozeOf(it.ex, answerFor(w, it));
+    var c = w.Train._cloze(it);
     if (right) { d.getElementById("trCloze").value = c.answer; d.querySelector('[data-trcheck="cloze"]').click(); }
     else d.querySelector('[data-trskip="cloze"]').click();
   }
@@ -417,9 +417,9 @@ test("train: meaning → cloze → note, grades into SRS, answer hidden first", 
   var it = st.queue[0];
   d.getElementById("trExpr").value = answerFor(w, it);
   d.querySelector('[data-trcheck="meaning"]').click();
-  if (w.Study.clozeOf(it.ex, answerFor(w, it)).found) {
+  if (w.Train._cloze(it)) {
     assert.ok(d.getElementById("trCloze"), "cloze step after correct meaning");
-    d.getElementById("trCloze").value = w.Study.clozeOf(it.ex, answerFor(w, it)).answer;
+    d.getElementById("trCloze").value = w.Train._cloze(it).answer;
     d.querySelector('[data-trcheck="cloze"]').click();
   }
   assert.ok(d.querySelector(".tr-score.ok"), "correct");

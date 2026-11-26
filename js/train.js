@@ -234,5 +234,5 @@
   function leave() {}
   function todayCount() { var d = today(); return T.log.filter(function (e) { return e.d === d && e.k === "expr"; }).length; }
 
-  root.Train = { init: init, view: view, onClick: onClick, onChange: onChange, onKey: onKey, leave: leave, todayCount: todayCount, _state: st };
+  root.Train = { init: init, view: view, onClick: onClick, onChange: onChange, onKey: onKey, leave: leave, todayCount: todayCount, _state: st, _cloze: cloze };
 })(window);
