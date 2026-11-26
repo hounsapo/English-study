@@ -393,22 +393,66 @@ test("importing a v2 file migrates into v3 memory", function () {
 });
 
 /* ---------------- 출력 훈련 ---------------- */
-test("train page: only expression practice; answer hidden until checked", function () {
+function latest(w) { return w.ARTICLES.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; })[0]; }
+function answerFor(w, it) { return String(it.en).split("/")[0].replace(/\(.*?\)/g, " ").replace(/\s+/g, " ").trim(); }
+function solveCurrent(ctx, right) {
+  var d = ctx.document, w = ctx.window, st = w.Train._state, it = st.queue[st.i];
+  if (right) { d.getElementById("trExpr").value = answerFor(w, it); d.querySelector('[data-trcheck="meaning"]').click(); }
+  else d.querySelector('[data-trskip="meaning"]').click();
+  if (d.getElementById("trCloze")) {
+    var c = w.Study.clozeOf(it.ex, answerFor(w, it));
+    if (right) { d.getElementById("trCloze").value = c.answer; d.querySelector('[data-trcheck="cloze"]').click(); }
+    else d.querySelector('[data-trskip="cloze"]').click();
+  }
+  d.querySelector("[data-trnext]").click();
+  return it;
+}
+test("train: meaning → cloze → note, grades into SRS, answer hidden first", function () {
   var ctx = loadApp(); var d = ctx.document, w = ctx.window;
   go(ctx, "#/train");
-  var a = w.ARTICLES.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; })[0];
-  assert.ok(d.querySelector(".train-page"), "train page renders");
-  assert.ok(!d.querySelector("[data-trtab]"), "no other training tabs");
-  var ans = a.expressions[0][2];
-  assert.ok(d.getElementById("trBody").textContent.indexOf(ans) < 0, "answer hidden before check");
-  d.getElementById("trExpr").value = ans.split("/")[0].replace(/\(.*?\)/g, "").trim();
-  d.querySelector('[data-trcheck="expr"]').click();
-  assert.ok(d.querySelector(".tr-score.ok"), "correct expression accepted");
-  d.querySelector("[data-trnext]").click();
-  d.querySelector('[data-trskip="expr"]').click();
-  assert.ok(d.querySelector(".tr-score.no"), "skip shows answer as miss");
-  var saved = JSON.parse(w.localStorage.getItem("englishStudy.train.v1"));
-  assert.strictEqual(saved.log.length, 2, "training log saved separately");
+  var a = latest(w), st = w.Train._state;
+  assert.ok(!d.querySelector("[data-trtab]"), "only expression practice");
+  assert.strictEqual(st.queue.length, a.expressions.length, "fresh user: no past mix");
+  assert.ok(d.getElementById("trBody").textContent.indexOf(a.expressions[0][2]) < 0, "answer hidden before check");
+  var it = st.queue[0];
+  d.getElementById("trExpr").value = answerFor(w, it);
+  d.querySelector('[data-trcheck="meaning"]').click();
+  if (w.Study.clozeOf(it.ex, answerFor(w, it)).found) {
+    assert.ok(d.getElementById("trCloze"), "cloze step after correct meaning");
+    d.getElementById("trCloze").value = w.Study.clozeOf(it.ex, answerFor(w, it)).answer;
+    d.querySelector('[data-trcheck="cloze"]').click();
+  }
+  assert.ok(d.querySelector(".tr-score.ok"), "correct");
+  assert.ok(d.querySelector('textarea[data-note="' + it.key + '"]'), "my sentence box");
+  var mem = w.__ES.getMem();
+  assert.ok(mem.srs[it.key] && mem.srs[it.key].reps === 1, "graded good into SRS");
+  ctx.dom.window.close();
+});
+test("train: wrong items repeat until all correct; misses go to review", function () {
+  var ctx = loadApp(); var d = ctx.document, w = ctx.window;
+  go(ctx, "#/train");
+  var st = w.Train._state, n = st.queue.length, wrong = [];
+  for (var i = 0; i < n; i++) { var it = solveCurrent(ctx, i >= 2); if (i < 2) wrong.push(it.key); }
+  assert.ok(d.querySelector("[data-trretry]"), "retry button");
+  d.querySelector("[data-trretry]").click();
+  assert.strictEqual(st.queue.length, 2, "only wrong items");
+  solveCurrent(ctx, true); solveCurrent(ctx, true);
+  assert.ok(/완료/.test(d.getElementById("trBody").textContent), "done after all correct");
+  var mem = w.__ES.getMem();
+  wrong.forEach(function (k) { assert.ok(mem.misses[k], "miss noted"); assert.strictEqual(mem.srs[k].reps, 0, "graded hard once"); });
+  ctx.dom.window.close();
+});
+test("train: mixes up to 5 past-article misses", function () {
+  var ctx0 = loadApp(); var w0 = ctx0.window;
+  var arts = w0.ARTICLES.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; });
+  var old = arts[1], misses = {}, srs = {};
+  for (var i = 1; i <= 7; i++) { misses["expr:" + old.id + ":" + i] = { count: 1, last: "2026-11-20T00:00:00.000Z", reason: "hard" }; }
+  ctx0.dom.window.close();
+  var ctx = loadApp({ store: { items: {}, notes: {}, srs: srs, misses: misses } }); var w = ctx.window;
+  go(ctx, "#/train");
+  var past = w.Train._state.queue.filter(function (x) { return x.past; });
+  assert.strictEqual(past.length, 5, "5 past items mixed in");
+  assert.ok(/지난 기사 복습/.test(ctx.document.body.textContent));
   ctx.dom.window.close();
 });
 test("home and article pages link to output training", function () {

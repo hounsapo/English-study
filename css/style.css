@@ -315,3 +315,5 @@ a.chunk-hit:hover{background:#dbe7fe}
 .tr-col{height:70px;background:var(--border-subtle);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
 .tr-col span{display:block;width:100%;background:var(--accent);border-radius:8px 8px 0 0}
 .tr-avg{font-weight:700;font-size:15px;margin-top:4px}
+.tr-blank{display:inline-block;border-bottom:2px solid var(--accent);color:var(--accent);letter-spacing:.05em;margin:0 2px}
+.tr-cloze{font-size:16.5px}

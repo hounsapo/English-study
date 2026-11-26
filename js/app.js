@@ -171,7 +171,7 @@
     if (a) {
       h += '<a class="card today" href="#/articles/' + esc(a.id) + '"><div class="row"><span class="pill green">' + esc(a.dateLabel) + '</span><span class="pill">' + esc(a.field) + "</span>" +
         (isDone("article:" + a.id) ? '<span class="done-badge">✓ 학습 완료</span>' : "") + '</div><div class="t">' + esc(a.title) + '</div><div class="sum">' + esc(a.summary) + '</div><div class="small muted" style="margin-top:10px">' + esc(outletName(a)) + " · " + esc(a.published) + ' · <span style="color:var(--accent);font-weight:600">공부하러 가기 →</span></div></a>';
-      h += '<a class="card tr-cta" href="#/train/' + esc(a.id) + '"><b>✍️ 오늘의 표현 훈련</b><span class="small muted">핵심 표현을 한국어 뜻만 보고 영어로 떠올려 보세요' + (window.Train && window.Train.todayCount() ? ' · 오늘 ' + window.Train.todayCount() + '개 풀었어요' : '') + '</span></a>';
+      h += '<a class="card tr-cta" href="#/train/' + esc(a.id) + '"><b>✍️ 오늘의 표현 훈련</b><span class="small muted">뜻 → 영어 → 예문 빈칸 → 내 문장, 틀린 표현은 다시 · 지난 기사 복습도 섞여 나와요' + (window.Train && window.Train.todayCount() ? ' · 오늘 ' + window.Train.todayCount() + '개 풀었어요' : '') + '</span></a>';
     } else h += '<div class="card muted">아직 등록된 기사가 없어요.</div>';
     h += "</div>";
 
@@ -1110,5 +1110,6 @@
     quiz: quiz,
     shadow: shadow
   };
+  if (window.Train && window.Train.init) window.Train.init({ getMem: function () { return mem; }, save: save, getNote: getNote });
   route();
 })();
