@@ -393,42 +393,22 @@ test("importing a v2 file migrates into v3 memory", function () {
 });
 
 /* ---------------- 출력 훈련 ---------------- */
-test("train page: back-translation hides the answer until submitted, then scores it", function () {
+test("train page: only expression practice; answer hidden until checked", function () {
   var ctx = loadApp(); var d = ctx.document, w = ctx.window;
   go(ctx, "#/train");
   var a = w.ARTICLES.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; })[0];
   assert.ok(d.querySelector(".train-page"), "train page renders");
-  assert.ok(d.body.textContent.indexOf(a.titleCard.biz) < 0, "biz answer hidden before submit");
-  d.getElementById("trAns").value = a.titleCard.biz;
-  d.querySelector('[data-trcheck="trans"]').click();
-  assert.ok(/100/.test(d.querySelector(".tr-score b").textContent), "exact answer scores 100");
-  d.querySelector("[data-trnext]").click();
-  assert.ok(d.getElementById("trAns"), "next sentence shows input");
-  ctx.dom.window.close();
-});
-test("train page: dictation, expressions and 4/3/2 tabs work", function () {
-  var ctx = loadApp(); var d = ctx.document, w = ctx.window;
-  go(ctx, "#/train");
-  d.querySelector('[data-trtab="dict"]').click();
-  d.querySelector("[data-trplay]").click();
-  assert.strictEqual(ctx.spoken.length, 1, "dictation speaks the sentence");
-  d.getElementById("trDict").value = "the";
-  d.querySelector('[data-trcheck="dict"]').click();
-  assert.ok(d.querySelector(".tr-miss"), "missed words are marked");
-  d.querySelector('[data-trtab="expr"]').click();
-  var a = w.ARTICLES.slice().sort(function (x, y) { return x.date < y.date ? 1 : -1; })[0];
-  d.getElementById("trExpr").value = a.expressions[0][2].split("/")[0].replace(/\(.*?\)/g, "").trim();
+  assert.ok(!d.querySelector("[data-trtab]"), "no other training tabs");
+  var ans = a.expressions[0][2];
+  assert.ok(d.getElementById("trBody").textContent.indexOf(ans) < 0, "answer hidden before check");
+  d.getElementById("trExpr").value = ans.split("/")[0].replace(/\(.*?\)/g, "").trim();
   d.querySelector('[data-trcheck="expr"]').click();
   assert.ok(d.querySelector(".tr-score.ok"), "correct expression accepted");
-  d.querySelector('[data-trtab="sum"]').click();
-  assert.ok(d.getElementById("trTimer"), "timer renders");
-  d.querySelector("[data-trgo]").click();
-  d.getElementById("trSum").value = "Jensen Huang returned as CEO after eleven days and the board said there was no security risk";
-  d.querySelector("[data-trgo]").click();
-  assert.ok(/wpm/.test(d.querySelector(".tr-round").textContent), "round shows wpm");
+  d.querySelector("[data-trnext]").click();
+  d.querySelector('[data-trskip="expr"]').click();
+  assert.ok(d.querySelector(".tr-score.no"), "skip shows answer as miss");
   var saved = JSON.parse(w.localStorage.getItem("englishStudy.train.v1"));
-  assert.ok(saved.log.length >= 2, "training log saved separately");
-  assert.ok(!JSON.parse(w.localStorage.getItem("englishStudy.progress.v1") || "{}").train, "progress store untouched");
+  assert.strictEqual(saved.log.length, 2, "training log saved separately");
   ctx.dom.window.close();
 });
 test("home and article pages link to output training", function () {

@@ -304,21 +304,14 @@ a.chunk-hit:hover{background:#dbe7fe}
 /* ---------- 출력 훈련 (#/train) ---------- */
 .tr-cta{display:flex;flex-direction:column;gap:4px;margin-top:12px;text-decoration:none;color:var(--text);border-color:#c7d7fb;background:var(--accent-soft)}
 .tr-cta b{color:var(--accent)}
-.tr-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .tr-input{width:100%;font-family:var(--en);font-size:16px;line-height:1.6;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);resize:vertical}
 .tr-input:focus{outline:2px solid var(--accent);outline-offset:1px}
-.tr-mine{font-family:var(--en);font-size:16px;color:var(--text)}
-.tr-miss{color:var(--red);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
 .tr-score{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px}
 .tr-score b{font-size:34px;line-height:1;color:var(--accent)}
 .tr-score.ok b{color:var(--green)}.tr-score.no b{color:var(--red)}
 .tr-score span{color:var(--text2);font-size:14px}
 .tr-hint{margin-top:8px;font-family:var(--en);letter-spacing:.02em}
-.tr-timer{font-size:64px;font-weight:700;text-align:center;line-height:1.1;margin-top:16px;font-variant-numeric:tabular-nums}
-.tr-round{display:grid;grid-template-columns:44px minmax(0,1fr) 72px auto;gap:10px;align-items:center;margin:6px 0;font-size:14px}
-.tr-round b{text-align:right;font-variant-numeric:tabular-nums}
 .tr-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;text-align:center}
 .tr-col{height:70px;background:var(--border-subtle);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
 .tr-col span{display:block;width:100%;background:var(--accent);border-radius:8px 8px 0 0}
 .tr-avg{font-weight:700;font-size:15px;margin-top:4px}
-@media(max-width:560px){.tr-round{grid-template-columns:40px minmax(0,1fr) 64px}.tr-round .small{grid-column:2/-1}}
