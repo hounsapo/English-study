@@ -173,8 +173,9 @@
         '<div class="row" style="margin-top:10px"><button type="button" class="btn primary" data-trcheck="cloze">확인</button><button type="button" class="btn" data-trskip="cloze">모르겠어요</button></div>';
     } else {
       var ok = r.meaningOk && r.clozeOk !== false;
-      h += '<div class="tr-score ' + (ok ? "ok" : "no") + '"><b>' + (ok ? "정답" : "다시 나와요") + "</b><span>" +
-        (r.meaningOk ? (r.clozeOk === false ? "뜻은 맞혔지만 예문 빈칸을 놓쳤어요" + (r.clozeUser ? " (내 답: " + esc(r.clozeUser) + ")" : "") : (r.clozeOk ? "뜻·예문 빈칸 모두 맞힘" : "")) : esc(r.user ? "내 답: " + r.user : "건너뜀")) + "</span></div>";
+      if (ok) h += '<div class="tr-score ok"><b>정답</b><span>' + (r.clozeOk ? "뜻·예문 빈칸 모두 맞힘" : "") + "</span></div>";
+      else if (r.meaningOk && r.clozeOk === false) h += '<div class="small muted" style="margin:14px 0 4px">뜻은 맞혔지만 예문 빈칸을 놓쳤어요' + (r.clozeUser ? " (내 답: " + esc(r.clozeUser) + ")" : "") + "</div>";
+      else if (r.user) h += '<div class="small muted" style="margin:14px 0 4px">내 답: ' + esc(r.user) + "</div>";
       h += '<div class="blk l-biz"><div class="lbl">영어 표현</div><div class="txt">' + esc(it.en) + ' <button type="button" class="speak-btn" data-speak="' + esc(plain(it.en)) + '" aria-label="듣기">🔊</button></div></div>';
       if (it.ex) h += '<div class="blk l-ultra"><div class="lbl">예문</div><div class="txt">' + esc(it.ex) + ' <button type="button" class="speak-btn" data-speak="' + esc(it.ex) + '" aria-label="예문 듣기">🔊</button></div></div>';
       if (it.past) h += '<div class="small muted">출처: ' + esc(it.art.date) + " · " + esc(it.art.title) + "</div>";
