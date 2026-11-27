@@ -4,6 +4,254 @@
  */
 window.ARTICLES = [
   {
+    "id": "d20261128",
+    "date": "2026-11-28",
+    "dateLabel": "2026년 11월 28일 (토)",
+    "title": "與 정년연장특위, 10개월 만에 노사 협의…합의 실패",
+    "outlet": "한국경제 (The Korea Economic Daily)",
+    "url": "https://www.hankyung.com/article/2026112754321",
+    "published": "2026년 11월 27일 17:55 (KST, 한국경제 온라인 게재 기준)",
+    "field": "경제 · 노동/고용정책 · 정년연장",
+    "basis": "네이버 뉴스 언론사별 랭킹 페이지(11/28 06:55 KST경 접속 시도)와 네이트 경제 랭킹은 모두 자동 접속이 차단돼 직접 확인하지 못했습니다. 대신 확인한 결과, SBS 11/28 아침 ‘오늘의 주요 뉴스’ 4건 중 경제·정책 이슈로는 ‘정년연장 노사 10개월 만의 회동·합의 불발’이 올랐고, 연합뉴스(종합)·한국경제·파이낸셜뉴스·헤럴드경제·한국경제TV 등 여러 매체가 같은 날 일제히 보도해 가장 넓게 다뤄진 경제·정책 이슈로 판단했습니다. 미국 쪽(Yahoo 톱: 블랙프라이데이 소비·GDP 통계 논란, 기술주 반등)과 겹치는 경제 이슈는 엔비디아 칩 밀반입 의혹이었으나, 11/24에 엔비디아 CEO 복귀 이슈를 이미 다뤄 제외했습니다. 최근 7일간 다룬 관세·증시 이슈와도 겹치지 않습니다. (정확한 클릭 수는 비공개라 주요 뉴스 배치·보도 범위로 대신 판단)",
+    "summary": "더불어민주당 정년연장특별위원회가 27일 10개월 만에 노사 협의를 다시 열었지만 합의안을 내지 못했습니다. 특위는 2037년까지 법정 정년을 65세로 단계적으로 올리는 방안을 제시했으나, 노동계는 일괄 정년연장을, 경영계는 청년 고용 위축을 이유로 퇴직 후 재고용을 고수했습니다. 민주당은 다음 달 2일 마지막 회의 뒤 합의 여부와 관계없이 자체 입법안을 마련할 것으로 보입니다.",
+    "titleCard": {
+      "no": 1,
+      "ko": "與 정년연장특위, 10개월 만에 노사 협의…합의 실패",
+      "ultra": "Ruling Party Panel Revives Labor Talks on Retirement Age After 10 Months; No Deal",
+      "biz": "The ruling party’s special committee on extending the retirement age resumed labor-management talks for the first time in 10 months but failed to reach an agreement.",
+      "note": "‘與’는 여당, 즉 the ruling party입니다. ‘정년연장’은 extending the (statutory) retirement age, ‘노사 협의’는 labor-management talks가 표준 표현입니다. ‘합의 실패’는 헤드라인에서는 No Deal, 문장에서는 fail to reach an agreement로 풉니다."
+    },
+    "cards": [
+      {
+        "no": 2,
+        "ko": "더불어민주당 정년연장특별위원회는 27일 국회 의원회관에서 노사 소위원회를 열고 10개월 만에 노사 협의를 재개했지만 합의안 도출에 실패했다.",
+        "ultra": "The Democratic Party panel met labor and business on the 27th but reached no deal.",
+        "biz": "On November 27, the Democratic Party’s special committee on extending the retirement age convened a labor-management subcommittee at the National Assembly, resuming talks for the first time in 10 months, but failed to produce an agreement.",
+        "note": "‘~만에 재개했다’는 resume ... for the first time in 10 months로 옮기면 공백 기간이 자연스럽게 드러납니다. ‘합의안 도출’은 produce/hammer out an agreement. ‘소위원회’는 subcommittee입니다.",
+        "alts": [
+          "reopened talks after a 10-month hiatus",
+          "came away without a deal",
+          "failed to hammer out a compromise"
+        ]
+      },
+      {
+        "no": 3,
+        "ko": "특위는 2029년 61세를 시작으로 2년마다 1세씩 정년을 올려 2037년 65세에 도달하는 방안을 제시했다.",
+        "ultra": "The panel proposed raising the age to 65 by 2037, one year every two years.",
+        "biz": "The committee put forward a plan to raise the retirement age by one year every two years, starting at 61 in 2029 and reaching 65 by 2037.",
+        "note": "‘방안을 제시하다’는 put forward / present a plan. ‘2년마다 1세씩’은 by one year every two years로 증가 폭(by)과 주기(every)를 구분합니다. ‘단계적으로’를 넣고 싶다면 phase in / in phases를 씁니다.",
+        "alts": [
+          "phase in a retirement age of 65",
+          "in two-year increments",
+          "a gradual increase to 65 by 2037"
+        ]
+      },
+      {
+        "no": 4,
+        "ko": "노동계는 퇴직 후 재고용은 법정 정년연장의 대안이 될 수 없다며 정년을 일괄 연장해야 한다고 요구했다.",
+        "ultra": "Unions said rehiring can’t replace a legal extension and demanded a blanket increase.",
+        "biz": "Labor groups argued that post-retirement rehiring is no substitute for a statutory extension and called for an across-the-board increase in the retirement age.",
+        "note": "‘~의 대안이 될 수 없다’는 be no substitute for가 간결합니다. ‘일괄 연장’은 across-the-board / blanket extension. ‘요구했다’는 demand보다 격식 있는 call for도 자주 씁니다.",
+        "alts": [
+          "cannot replace a statutory extension",
+          "a uniform extension for all workers",
+          "pressed for legislation"
+        ]
+      },
+      {
+        "no": 5,
+        "ko": "경영계는 인건비 부담과 청년 신규 채용 위축 가능성을 이유로 퇴직 후 재고용 중심의 계속고용을 주장했다.",
+        "ultra": "Business groups backed rehiring, citing labor costs and fewer jobs for young people.",
+        "biz": "Business groups advocated continued employment centered on post-retirement rehiring, citing the burden of labor costs and the risk of a slowdown in hiring young workers.",
+        "note": "‘~을 이유로’는 citing ~ 분사구로 붙이면 깔끔합니다. ‘인건비 부담’은 labor-cost burden, ‘청년 신규 채용 위축’은 a slowdown/chilling effect on youth hiring. ‘계속고용’은 continued employment입니다.",
+        "alts": [
+          "on the grounds of higher labor costs",
+          "a chilling effect on youth hiring",
+          "taking into account labor-cost pressures"
+        ]
+      },
+      {
+        "no": 6,
+        "ko": "이동근 한국경영자총협회 상근부회장은 2016년 60세 정년 의무화 이후 고령자 고용이 1명 늘 때 청년 고용은 최대 1.5명 줄었다고 주장했다.",
+        "ultra": "KEF said each added older worker cost up to 1.5 youth jobs after 2016.",
+        "biz": "Lee Dong-geun, executive vice chairman of the Korea Enterprises Federation (KEF), claimed that since the mandatory retirement age of 60 took effect in 2016, every additional older worker has coincided with up to 1.5 fewer young workers.",
+        "note": "‘~이 1명 늘 때 ~은 최대 1.5명 줄었다’는 for every additional ~, up to 1.5 fewer ~ 구조가 대비를 잘 살립니다. ‘의무화’는 become mandatory / take effect. ‘주장했다’는 근거 다툼이 있는 수치이므로 claimed가 적절합니다.",
+        "alts": [
+          "for every older worker added",
+          "came at the expense of young workers",
+          "crowded out youth employment"
+        ]
+      },
+      {
+        "no": 7,
+        "ko": "오기웅 중소기업중앙회 상근부회장은 중소기업 501곳 중 83.2%가 퇴직 후 재고용을 선호한다는 조사 결과를 제시했다.",
+        "ultra": "83.2% of 501 SMEs prefer rehiring, a survey showed.",
+        "biz": "Oh Ki-woong, executive vice chairman of the Korea Federation of SMEs, presented survey results showing that 83.2% of 501 small and medium-sized enterprises prefer post-retirement rehiring.",
+        "note": "‘조사 결과를 제시했다’는 present/cite survey results. ‘501곳 중 83.2%’는 83.2% of 501 SMEs처럼 비율을 앞에 둡니다. ‘중소기업’은 SMEs (small and medium-sized enterprises)가 표준입니다.",
+        "alts": [
+          "cited a survey of 501 SMEs",
+          "a vast majority of small firms",
+          "favor rehiring over an extension"
+        ]
+      },
+      {
+        "no": 8,
+        "ko": "한성규 민주노총 부위원장은 내년 기업에 대한 세금 감면액만 104조9300억원에 달한다며 비용 부담 주장을 반박했다.",
+        "ultra": "KCTU countered that corporate tax breaks will top KRW 104.93T next year.",
+        "biz": "Han Seong-gyu, vice president of the Korean Confederation of Trade Unions (KCTU), pushed back on the cost argument, noting that tax breaks for businesses alone will amount to KRW 104.93 trillion next year.",
+        "note": "‘104조9300억원’은 KRW 104.93 trillion으로 조 단위를 trillion으로 옮깁니다. ‘~만 ~에 달한다’는 alone will amount to. ‘반박했다’는 push back on / rebut가 비즈니스 톤에 맞습니다.",
+        "alts": [
+          "rebutted the cost argument",
+          "corporate tax breaks totaling KRW 104.93 trillion",
+          "give back to society"
+        ]
+      },
+      {
+        "no": 9,
+        "ko": "민주당은 다음 달 2일 마지막 회의를 연 뒤 노사 합의 여부와 관계없이 자체 입법안을 마련할 것으로 보인다.",
+        "ultra": "After a final meeting Dec. 2, the party is expected to draft its own bill regardless.",
+        "biz": "The Democratic Party is expected to draft its own legislation after a final meeting on December 2, regardless of whether labor and management reach a deal.",
+        "note": "‘~할 것으로 보인다’는 be expected to. ‘~여부와 관계없이’는 regardless of whether ~. ‘자체 입법안을 마련하다’는 draft its own bill/legislation으로 옮깁니다.",
+        "alts": [
+          "with or without a labor-management deal",
+          "move ahead with its own bill",
+          "a last-ditch meeting"
+        ]
+      }
+    ],
+    "translation": [
+      "※ 저작권 보호를 위해 원문 전체를 옮기지 않고, 기사 핵심을 비즈니스 영어로 압축 정리한 요약 번역입니다. 원문은 아래 ‘원문 기사’ 링크에서 확인하세요.",
+      "The Democratic Party’s special committee on extending the retirement age resumed labor-management talks on November 27 for the first time in 10 months, but the two sides again failed to reach an agreement. The meeting was held as a subcommittee session at the National Assembly.",
+      "The committee presented a plan to raise the statutory retirement age in stages to 65 by 2037, starting at 61 in 2029 and adding one year every two years, while making post-retirement rehiring mandatory in the interim.",
+      "Business groups pushed back. Lee Dong-geun, executive vice chairman of the Korea Enterprises Federation, argued that since the retirement age of 60 became mandatory in 2016, every additional older worker has coincided with up to 1.5 fewer young workers. Oh Ki-woong of the Korea Federation of SMEs cited a survey in which 83.2% of 501 small and medium-sized firms preferred rehiring, and called for autonomy in selecting who is rehired.",
+      "Labor groups held their ground. Han Seong-gyu, vice president of the Korean Confederation of Trade Unions, countered the cost argument by noting that tax breaks for businesses alone will reach KRW 104.93 trillion next year. Kang Seok-yun, senior vice president of the Federation of Korean Trade Unions, urged swift legislation to close the income gap workers face before their pensions begin.",
+      "Rep. Kim Ju-young, the committee’s secretary, said the panel had delivered its proposal, but the two sides’ positions remained far apart. Asked whether a bill would be introduced within the year, he said the party would have little choice but to do so.",
+      "The committee will hold its final meeting on December 2, after which the Democratic Party is expected to draft its own legislation regardless of whether labor and management reach a deal."
+    ],
+    "expressions": [
+      [
+        "1",
+        "정년을 연장하다",
+        "extend the retirement age / raise the retirement age",
+        "Several manufacturers plan to extend the retirement age to retain skilled workers."
+      ],
+      [
+        "2",
+        "법정 정년",
+        "statutory retirement age",
+        "The statutory retirement age in Korea has been 60 since 2016."
+      ],
+      [
+        "3",
+        "노사 협의",
+        "labor-management talks",
+        "Labor-management talks stalled over wage adjustments for older employees."
+      ],
+      [
+        "4",
+        "합의에 이르다",
+        "reach an agreement / reach a deal",
+        "The two sides failed to reach an agreement before the deadline."
+      ],
+      [
+        "5",
+        "~만에 처음으로",
+        "for the first time in (period)",
+        "Exports rose for the first time in 10 months, lifting market sentiment."
+      ],
+      [
+        "6",
+        "단계적으로 도입하다",
+        "phase in",
+        "The company will phase in the new pay system over three years."
+      ],
+      [
+        "7",
+        "퇴직 후 재고용",
+        "post-retirement rehiring",
+        "Post-retirement rehiring lets firms keep veteran engineers at lower cost."
+      ],
+      [
+        "8",
+        "계속고용",
+        "continued employment",
+        "Investors want clarity on how continued employment rules will affect labor costs."
+      ],
+      [
+        "9",
+        "일괄적인, 전면적인",
+        "across-the-board / blanket",
+        "Management rejected an across-the-board salary increase."
+      ],
+      [
+        "10",
+        "~의 대안이 될 수 없다",
+        "be no substitute for (something)",
+        "Short-term cost cuts are no substitute for a sustainable growth strategy."
+      ],
+      [
+        "11",
+        "인건비 부담",
+        "labor-cost burden / burden of labor costs",
+        "The labor-cost burden weighs heavily on small and medium-sized enterprises."
+      ],
+      [
+        "12",
+        "채용을 위축시키다",
+        "dampen hiring / have a chilling effect on hiring",
+        "Higher payroll taxes could dampen hiring in the services sector."
+      ],
+      [
+        "13",
+        "청년 고용",
+        "youth employment",
+        "The bank's report links slower youth employment to weaker consumer spending."
+      ],
+      [
+        "14",
+        "~을 희생하여",
+        "at the expense of (something)",
+        "Margins improved at the expense of long-term investment."
+      ],
+      [
+        "15",
+        "중소기업",
+        "small and medium-sized enterprises / SMEs",
+        "Policy loans for SMEs were expanded to ease funding pressure."
+      ],
+      [
+        "16",
+        "세금 감면",
+        "tax breaks / tax incentives",
+        "The government offered tax breaks to firms that expand domestic investment."
+      ],
+      [
+        "17",
+        "~에 반박하다",
+        "push back on (something) / rebut (something)",
+        "The CFO pushed back on analysts' concerns about rising debt."
+      ],
+      [
+        "18",
+        "입장 차이가 좁혀지지 않다",
+        "remain far apart",
+        "The buyer and seller remain far apart on valuation."
+      ],
+      [
+        "19",
+        "~여부와 관계없이",
+        "regardless of whether",
+        "We will proceed with the expansion regardless of whether rates fall this year."
+      ],
+      [
+        "20",
+        "입법안을 마련하다",
+        "draft legislation / draft a bill",
+        "Lawmakers are drafting legislation to tighten disclosure rules for listed companies."
+      ]
+    ]
+  },
+  {
     "id": "d20261127",
     "date": "2026-11-27",
     "dateLabel": "2026년 11월 27일 (금)",
